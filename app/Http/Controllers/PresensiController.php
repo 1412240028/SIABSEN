@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Presensi;
 use App\Models\SesiPresensi;
 use App\Models\Mahasiswa;
+use App\Models\MataKuliah;
+use App\Models\Kelas;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
 
 class PresensiController extends Controller
 {
@@ -43,13 +45,44 @@ class PresensiController extends Controller
     {
         $mahasiswa = Mahasiswa::where('user_id', auth()->id())->firstOrFail();
 
-        $presensi = Presensi::with(['sesiPresensi.jadwal.mataKuliah', 'sesiPresensi.jadwal.kelas'])
-            ->where('mahasiswa_id', $mahasiswa->id)
+        $statusOptions = [
+            'HADIR' => 'Hadir',
+            'TERLAMBAT' => 'Terlambat',
+            'IZIN' => 'Izin',
+            'SAKIT' => 'Sakit',
+            'ALPHA' => 'Alpha',
+        ];
+
+        $filters = $request->validate([
+            'status' => ['nullable', Rule::in(array_keys($statusOptions))],
+            'mata_kuliah_id' => ['nullable', 'integer', 'exists:mata_kuliah,id'],
+        ]);
+
+        $presensiQuery = Presensi::with(['sesiPresensi.jadwal.mataKuliah', 'sesiPresensi.jadwal.kelas'])
+            ->where('mahasiswa_id', $mahasiswa->id);
+
+        if (! empty($filters['status'])) {
+            $presensiQuery->where('status', $filters['status']);
+        }
+
+        if (! empty($filters['mata_kuliah_id'])) {
+            $presensiQuery->whereHas('sesiPresensi.jadwal', function ($query) use ($filters) {
+                $query->where('mata_kuliah_id', $filters['mata_kuliah_id']);
+            });
+        }
+
+        $mataKuliahOptions = MataKuliah::whereHas('jadwal.sesiPresensi.presensi', function ($query) use ($mahasiswa) {
+            $query->where('mahasiswa_id', $mahasiswa->id);
+        })
+            ->orderBy('nama')
+            ->get();
+
+        $presensi = $presensiQuery
             ->orderByDesc('waktu_presensi')
             ->paginate(10)
             ->withQueryString();
 
-        return view('presensi.history', compact('presensi'));
+        return view('presensi.history', compact('presensi', 'statusOptions', 'mataKuliahOptions', 'filters'));
     }
 
     public function showScanForm()
@@ -92,11 +125,71 @@ class PresensiController extends Controller
 
     public function rekap(Request $request)
     {
-        $rekap = Presensi::with(['sesiPresensi.jadwal.mataKuliah', 'sesiPresensi.jadwal.kelas', 'mahasiswa.kelas'])
+        $statusOptions = [
+            'HADIR' => 'Hadir',
+            'TERLAMBAT' => 'Terlambat',
+            'IZIN' => 'Izin',
+            'SAKIT' => 'Sakit',
+            'ALPHA' => 'Alpha',
+        ];
+
+        $filters = $request->validate([
+            'kelas_id' => ['nullable', 'integer', 'exists:kelas,id'],
+            'mata_kuliah_id' => ['nullable', 'integer', 'exists:mata_kuliah,id'],
+            'status' => ['nullable', Rule::in(array_keys($statusOptions))],
+            'tanggal_mulai' => ['nullable', 'date'],
+            'tanggal_selesai' => ['nullable', 'date', 'after_or_equal:tanggal_mulai'],
+        ]);
+
+        $rekapQuery = Presensi::with(['sesiPresensi.jadwal.mataKuliah', 'sesiPresensi.jadwal.kelas', 'mahasiswa.kelas']);
+
+        if (! empty($filters['kelas_id'])) {
+            $rekapQuery->whereHas('sesiPresensi.jadwal', function ($query) use ($filters) {
+                $query->where('kelas_id', $filters['kelas_id']);
+            });
+        }
+
+        if (! empty($filters['mata_kuliah_id'])) {
+            $rekapQuery->whereHas('sesiPresensi.jadwal', function ($query) use ($filters) {
+                $query->where('mata_kuliah_id', $filters['mata_kuliah_id']);
+            });
+        }
+
+        if (! empty($filters['status'])) {
+            $rekapQuery->where('status', $filters['status']);
+        }
+
+        if (! empty($filters['tanggal_mulai'])) {
+            $rekapQuery->whereHas('sesiPresensi', function ($query) use ($filters) {
+                $query->whereDate('tanggal', '>=', $filters['tanggal_mulai']);
+            });
+        }
+
+        if (! empty($filters['tanggal_selesai'])) {
+            $rekapQuery->whereHas('sesiPresensi', function ($query) use ($filters) {
+                $query->whereDate('tanggal', '<=', $filters['tanggal_selesai']);
+            });
+        }
+
+        $kelasOptions = Kelas::whereHas('jadwal.sesiPresensi.presensi')
+            ->orderBy('nama_kelas')
+            ->get();
+
+        $mataKuliahOptions = MataKuliah::whereHas('jadwal.sesiPresensi.presensi')
+            ->orderBy('nama')
+            ->get();
+
+        $rekap = $rekapQuery
             ->orderByDesc('waktu_presensi')
             ->paginate(20)
             ->withQueryString();
 
-        return view('presensi.rekap', compact('rekap'));
+        return view('presensi.rekap', compact(
+            'rekap',
+            'kelasOptions',
+            'mataKuliahOptions',
+            'statusOptions',
+            'filters'
+        ));
     }
 }
