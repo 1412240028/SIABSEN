@@ -66,7 +66,9 @@ class SesiPresensiController extends Controller
             ->orderBy('nama')
             ->get();
 
-        return view('sesi_presensi.show', compact('sesiPresensi', 'mahasiswa'));
+        $qrCode = QrCode::size(220)->generate($sesiPresensi->token);
+
+        return view('sesi_presensi.show', compact('sesiPresensi', 'mahasiswa', 'qrCode'));
     }
 
     public function close(SesiPresensi $sesiPresensi)

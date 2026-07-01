@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ * @property int $jadwal_id
+ * @property int $pertemuan_ke
+ * @property mixed $tanggal
+ * @property string $token
+ * @property mixed|null $opened_at
+ * @property mixed|null $expired_at
+ * @property mixed|null $closed_at
+ * @property string $status
+ */
 class SesiPresensi extends Model
 {
     use HasFactory;

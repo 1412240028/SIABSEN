@@ -37,9 +37,7 @@
                     <div class="bg-white border border-gray-200 p-6 rounded-md shadow-sm">
                         <p class="text-sm font-semibold text-gray-700">QR Code Presensi</p>
                         <div class="mt-4 flex justify-center">
-                            @php
-                                echo \SimpleSoftwareIO\QrCode\Facades\QrCode::size(220)->generate($sesiPresensi->token);
-                            @endphp
+                            {!! $qrCode !!}
                         </div>
                         <p class="mt-4 text-sm text-gray-500">Mahasiswa dapat memindai QR ini untuk melakukan presensi otomatis.</p>
                     </div>
