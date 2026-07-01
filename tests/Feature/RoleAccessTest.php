@@ -129,6 +129,45 @@ class RoleAccessTest extends TestCase
             'status' => true,
         ]);
 
+        $otherUser = User::factory()->create(['role' => 'dosen']);
+        $otherDosen = $otherUser->dosen()->create([
+            'nidn' => '0000000004',
+            'nama' => 'Dosen Lain',
+            'jenis_kelamin' => 'L',
+            'no_hp' => '08123456780',
+            'alamat' => 'Test',
+        ]);
+        $otherKelas = Kelas::create([
+            'nama_kelas' => 'TI24B',
+            'angkatan' => 2024,
+            'kapasitas' => 40,
+            'status' => true,
+        ]);
+        $otherMataKuliah = MataKuliah::create([
+            'kode' => 'IF202',
+            'nama' => 'Basis Data',
+            'sks' => 3,
+            'status' => true,
+        ]);
+        Jadwal::create([
+            'dosen_id' => $otherDosen->id,
+            'kelas_id' => $otherKelas->id,
+            'mata_kuliah_id' => $otherMataKuliah->id,
+            'semester' => 'Ganjil',
+            'tahun_ajaran' => '2026/2027',
+            'hari' => 'Selasa',
+            'jam_mulai' => '10:00',
+            'jam_selesai' => '11:40',
+            'ruangan' => 'A102',
+            'status' => true,
+        ]);
+
+        $this->actingAs($user)
+            ->get('/dosen/sesi_presensi/create')
+            ->assertStatus(200)
+            ->assertSee('Pemrograman Web')
+            ->assertDontSee('Basis Data');
+
         $response = $this->actingAs($user)->post('/dosen/sesi_presensi', [
             'jadwal_id' => $jadwal->id,
             'pertemuan_ke' => 1,
@@ -143,6 +182,10 @@ class RoleAccessTest extends TestCase
             'pertemuan_ke' => 1,
             'status' => 'OPEN',
         ]);
-        $this->actingAs($user)->get('/dosen/sesi_presensi')->assertStatus(200);
+        $this->actingAs($user)
+            ->get('/dosen/sesi_presensi')
+            ->assertStatus(200)
+            ->assertSee('Pemrograman Web')
+            ->assertDontSee('Basis Data');
     }
 }

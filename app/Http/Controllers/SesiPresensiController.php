@@ -7,6 +7,7 @@ use App\Models\Mahasiswa;
 use App\Models\SesiPresensi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class SesiPresensiController extends Controller
@@ -31,8 +32,11 @@ class SesiPresensiController extends Controller
 
     public function create()
     {
+        $dosenId = auth()->user()->dosen?->id;
+
         $jadwal = Jadwal::with(['mataKuliah', 'kelas'])
             ->where('status', true)
+            ->where('dosen_id', $dosenId)
             ->orderBy('hari')
             ->orderBy('jam_mulai')
             ->get();
@@ -42,8 +46,18 @@ class SesiPresensiController extends Controller
 
     public function store(Request $request)
     {
+        $dosenId = $request->user()->dosen?->id;
+
+        abort_if(! $dosenId, 403, 'Akun dosen belum terhubung dengan data dosen.');
+
         $validated = $request->validate([
-            'jadwal_id' => 'required|exists:jadwal,id',
+            'jadwal_id' => [
+                'required',
+                Rule::exists('jadwal', 'id')->where(function ($query) use ($dosenId) {
+                    $query->where('dosen_id', $dosenId)
+                        ->where('status', true);
+                }),
+            ],
             'pertemuan_ke' => 'required|integer|min:1',
             'tanggal' => 'required|date',
             'opened_at' => 'required|date',
