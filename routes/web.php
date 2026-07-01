@@ -54,6 +54,13 @@ Route::middleware('auth')->group(function () {
         Route::resource('mahasiswa', MahasiswaController::class)->except(['index', 'show']);
     });
 
+    // Dosen only: sesi presensi
+    Route::middleware('role:dosen')->prefix('dosen')->name('dosen.')->group(function () {
+        Route::resource('sesi_presensi', SesiPresensiController::class)->only(['index', 'create', 'store', 'show']);
+        Route::patch('sesi_presensi/{sesi_presensi}/close', [SesiPresensiController::class, 'close'])->name('sesi_presensi.close');
+        Route::post('sesi_presensi/{sesi_presensi}/presensi', [PresensiController::class, 'store'])->name('sesi_presensi.presensi.store');
+    });
+
     // Admin + Dosen: boleh lihat aja
     Route::middleware('role:admin,dosen')->group(function () {
         Route::resource('kelas', KelasController::class)
@@ -67,13 +74,6 @@ Route::middleware('auth')->group(function () {
     // Admin only: jadwal manajemen
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::resource('jadwal', JadwalController::class);
-    });
-
-    // Dosen only: sesi presensi
-    Route::middleware('role:dosen')->prefix('dosen')->name('dosen.')->group(function () {
-        Route::resource('sesi_presensi', SesiPresensiController::class)->only(['index', 'create', 'store', 'show']);
-        Route::patch('sesi_presensi/{sesi_presensi}/close', [SesiPresensiController::class, 'close'])->name('sesi_presensi.close');
-        Route::post('sesi_presensi/{sesi_presensi}/presensi', [PresensiController::class, 'store'])->name('sesi_presensi.presensi.store');
     });
 
     // Mahasiswa only: presensi history and scan
