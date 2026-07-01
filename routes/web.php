@@ -9,6 +9,7 @@ use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\SesiPresensiController;
 use App\Http\Controllers\PresensiController;
+use App\Models\Presensi;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,7 +38,50 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard Mahasiswa
     Route::get('/mahasiswa/dashboard', function () {
-        return view('dashboard-mahasiswa');
+        $mahasiswa = auth()->user()->mahasiswa()->with('kelas')->first();
+
+        $statusCounts = collect([
+            'HADIR' => 0,
+            'TERLAMBAT' => 0,
+            'IZIN' => 0,
+            'SAKIT' => 0,
+            'ALPHA' => 0,
+        ]);
+
+        $recentPresensi = collect();
+        $totalPresensi = 0;
+        $attendancePercentage = 0;
+
+        if ($mahasiswa) {
+            $counts = Presensi::where('mahasiswa_id', $mahasiswa->id)
+                ->selectRaw('status, COUNT(*) as total')
+                ->groupBy('status')
+                ->pluck('total', 'status');
+
+            $statusCounts = $statusCounts->map(
+                fn (int $total, string $status): int => (int) ($counts[$status] ?? $total)
+            );
+
+            $totalPresensi = $statusCounts->sum();
+            $attendedCount = $statusCounts['HADIR'] + $statusCounts['TERLAMBAT'];
+            $attendancePercentage = $totalPresensi > 0
+                ? round(($attendedCount / $totalPresensi) * 100)
+                : 0;
+
+            $recentPresensi = Presensi::with(['sesiPresensi.jadwal.mataKuliah', 'sesiPresensi.jadwal.kelas'])
+                ->where('mahasiswa_id', $mahasiswa->id)
+                ->orderByDesc('waktu_presensi')
+                ->limit(5)
+                ->get();
+        }
+
+        return view('dashboard-mahasiswa', compact(
+            'mahasiswa',
+            'statusCounts',
+            'recentPresensi',
+            'totalPresensi',
+            'attendancePercentage'
+        ));
     })->middleware('role:mahasiswa')->name('mahasiswa.dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

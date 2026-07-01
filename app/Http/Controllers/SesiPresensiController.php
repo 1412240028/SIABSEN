@@ -6,8 +6,10 @@ use App\Models\Jadwal;
 use App\Models\Mahasiswa;
 use App\Models\SesiPresensi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class SesiPresensiController extends Controller
@@ -64,6 +66,23 @@ class SesiPresensiController extends Controller
             'expired_at' => 'required|date|after:opened_at',
         ]);
 
+        $openedAt = Carbon::parse($validated['opened_at']);
+        $expiredAt = Carbon::parse($validated['expired_at']);
+
+        $hasOverlappingSession = SesiPresensi::where('jadwal_id', $validated['jadwal_id'])
+            ->where('status', 'OPEN')
+            ->where('opened_at', '<', $expiredAt)
+            ->where('expired_at', '>', $openedAt)
+            ->exists();
+
+        if ($hasOverlappingSession) {
+            throw ValidationException::withMessages([
+                'jadwal_id' => 'Jadwal ini sudah memiliki sesi presensi aktif pada rentang waktu tersebut.',
+            ]);
+        }
+
+        $validated['opened_at'] = $openedAt->toDateTimeString();
+        $validated['expired_at'] = $expiredAt->toDateTimeString();
         $validated['token'] = Str::upper(Str::random(12));
         $validated['status'] = 'OPEN';
 
