@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\KelasController;
+use App\Http\Controllers\MataKuliahController;
+use App\Http\Controllers\DosenController;
+use App\Http\Controllers\MahasiswaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -12,9 +16,9 @@ Route::middleware('auth')->group(function () {
     // Redirector — arahkan user ke dashboard sesuai role setelah login
     Route::get('/dashboard', function () {
         return match (auth()->user()->role) {
-            'admin'      => redirect()->route('admin.dashboard'),
-            'dosen'      => redirect()->route('dosen.dashboard'),
-            'mahasiswa'  => redirect()->route('mahasiswa.dashboard'),
+            'admin' => redirect()->route('admin.dashboard'),
+            'dosen' => redirect()->route('dosen.dashboard'),
+            'mahasiswa' => redirect()->route('mahasiswa.dashboard'),
         };
     })->name('dashboard');
 
@@ -37,12 +41,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // ============ MASTER DATA ============
-    use App\Http\Controllers\KelasController;
-    use App\Http\Controllers\MataKuliahController;
-    use App\Http\Controllers\DosenController;
-    use App\Http\Controllers\MahasiswaController;
-
     // Admin + Dosen: boleh lihat aja
     Route::middleware('role:admin,dosen')->group(function () {
         Route::resource('kelas', KelasController::class)->only(['index', 'show']);
@@ -60,4 +58,4 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
