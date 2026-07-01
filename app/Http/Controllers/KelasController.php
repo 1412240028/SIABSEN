@@ -7,9 +7,15 @@ use Illuminate\Http\Request;
 
 class KelasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kelas = Kelas::orderBy('nama_kelas')->paginate(10);
+        $kelas = Kelas::when($request->search, function ($query, $search) {
+            $query->where('nama_kelas', 'like', "%{$search}%");
+        })
+            ->orderBy('nama_kelas')
+            ->paginate(10)
+            ->withQueryString();
+
         return view('kelas.index', compact('kelas'));
     }
 
@@ -22,9 +28,9 @@ class KelasController extends Controller
     {
         $validated = $request->validate([
             'nama_kelas' => 'required|string|max:30|unique:kelas,nama_kelas',
-            'angkatan'   => 'required|digits:4|integer|min:2000|max:2100',
-            'kapasitas'  => 'required|integer|min:1|max:200',
-            'status'     => 'required|boolean',
+            'angkatan' => 'required|digits:4|integer|min:2000|max:2100',
+            'kapasitas' => 'required|integer|min:1|max:200',
+            'status' => 'required|boolean',
         ]);
 
         Kelas::create($validated);
@@ -46,9 +52,9 @@ class KelasController extends Controller
     {
         $validated = $request->validate([
             'nama_kelas' => 'required|string|max:30|unique:kelas,nama_kelas,' . $kelas->id,
-            'angkatan'   => 'required|digits:4|integer|min:2000|max:2100',
-            'kapasitas'  => 'required|integer|min:1|max:200',
-            'status'     => 'required|boolean',
+            'angkatan' => 'required|digits:4|integer|min:2000|max:2100',
+            'kapasitas' => 'required|integer|min:1|max:200',
+            'status' => 'required|boolean',
         ]);
 
         $kelas->update($validated);

@@ -10,9 +10,17 @@ use Illuminate\Support\Facades\Hash;
 
 class DosenController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $dosen = Dosen::with('user')->orderBy('nama')->paginate(10);
+        $dosen = Dosen::with('user')
+            ->when($request->search, function ($query, $search) {
+                $query->where('nama', 'like', "%{$search}%")
+                    ->orWhere('nidn', 'like', "%{$search}%");
+            })
+            ->orderBy('nama')
+            ->paginate(10)
+            ->withQueryString();
+
         return view('dosen.index', compact('dosen'));
     }
 
@@ -24,30 +32,30 @@ class DosenController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'          => 'required|string|max:100',
-            'email'         => 'required|email|max:100|unique:users,email',
-            'password'      => 'required|string|min:8',
-            'nidn'          => 'required|string|max:20|unique:dosen,nidn',
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:100|unique:users,email',
+            'password' => 'required|string|min:8',
+            'nidn' => 'required|string|max:20|unique:dosen,nidn',
             'jenis_kelamin' => 'required|in:L,P',
-            'no_hp'         => 'nullable|string|max:20',
-            'alamat'        => 'nullable|string',
+            'no_hp' => 'nullable|string|max:20',
+            'alamat' => 'nullable|string',
         ]);
 
         DB::transaction(function () use ($validated) {
             $user = User::create([
-                'name'     => $validated['name'],
-                'email'    => $validated['email'],
+                'name' => $validated['name'],
+                'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'role'     => 'dosen',
+                'role' => 'dosen',
             ]);
 
             Dosen::create([
-                'user_id'       => $user->id,
-                'nidn'          => $validated['nidn'],
-                'nama'          => $validated['name'],
+                'user_id' => $user->id,
+                'nidn' => $validated['nidn'],
+                'nama' => $validated['name'],
                 'jenis_kelamin' => $validated['jenis_kelamin'],
-                'no_hp'         => $validated['no_hp'],
-                'alamat'        => $validated['alamat'],
+                'no_hp' => $validated['no_hp'],
+                'alamat' => $validated['alamat'],
             ]);
         });
 
@@ -69,18 +77,18 @@ class DosenController extends Controller
     public function update(Request $request, Dosen $dosen)
     {
         $validated = $request->validate([
-            'name'          => 'required|string|max:100',
-            'email'         => 'required|email|max:100|unique:users,email,' . $dosen->user_id,
-            'password'      => 'nullable|string|min:8',
-            'nidn'          => 'required|string|max:20|unique:dosen,nidn,' . $dosen->id,
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:100|unique:users,email,' . $dosen->user_id,
+            'password' => 'nullable|string|min:8',
+            'nidn' => 'required|string|max:20|unique:dosen,nidn,' . $dosen->id,
             'jenis_kelamin' => 'required|in:L,P',
-            'no_hp'         => 'nullable|string|max:20',
-            'alamat'        => 'nullable|string',
+            'no_hp' => 'nullable|string|max:20',
+            'alamat' => 'nullable|string',
         ]);
 
         DB::transaction(function () use ($validated, $dosen) {
             $userData = [
-                'name'  => $validated['name'],
+                'name' => $validated['name'],
                 'email' => $validated['email'],
             ];
 
@@ -91,11 +99,11 @@ class DosenController extends Controller
             $dosen->user->update($userData);
 
             $dosen->update([
-                'nidn'          => $validated['nidn'],
-                'nama'          => $validated['name'],
+                'nidn' => $validated['nidn'],
+                'nama' => $validated['name'],
                 'jenis_kelamin' => $validated['jenis_kelamin'],
-                'no_hp'         => $validated['no_hp'],
-                'alamat'        => $validated['alamat'],
+                'no_hp' => $validated['no_hp'],
+                'alamat' => $validated['alamat'],
             ]);
         });
 

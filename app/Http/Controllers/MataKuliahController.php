@@ -7,9 +7,16 @@ use Illuminate\Http\Request;
 
 class MataKuliahController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $mataKuliah = MataKuliah::orderBy('kode')->paginate(10);
+        $mataKuliah = MataKuliah::when($request->search, function ($query, $search) {
+            $query->where('kode', 'like', "%{$search}%")
+                ->orWhere('nama', 'like', "%{$search}%");
+        })
+            ->orderBy('kode')
+            ->paginate(10)
+            ->withQueryString();
+
         return view('mata_kuliah.index', compact('mataKuliah'));
     }
 
@@ -21,9 +28,9 @@ class MataKuliahController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'kode'   => 'required|string|max:20|unique:mata_kuliah,kode',
-            'nama'   => 'required|string|max:100',
-            'sks'    => 'required|integer|min:1|max:6',
+            'kode' => 'required|string|max:20|unique:mata_kuliah,kode',
+            'nama' => 'required|string|max:100',
+            'sks' => 'required|integer|min:1|max:6',
             'status' => 'required|boolean',
         ]);
 
@@ -45,9 +52,9 @@ class MataKuliahController extends Controller
     public function update(Request $request, MataKuliah $mata_kuliah)
     {
         $validated = $request->validate([
-            'kode'   => 'required|string|max:20|unique:mata_kuliah,kode,' . $mata_kuliah->id,
-            'nama'   => 'required|string|max:100',
-            'sks'    => 'required|integer|min:1|max:6',
+            'kode' => 'required|string|max:20|unique:mata_kuliah,kode,' . $mata_kuliah->id,
+            'nama' => 'required|string|max:100',
+            'sks' => 'required|integer|min:1|max:6',
             'status' => 'required|boolean',
         ]);
 
