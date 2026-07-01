@@ -40,7 +40,24 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'mahasiswa',
         ]);
+
+        $kelas = \App\Models\Kelas::query()->where('status', true)->orderBy('nama_kelas')->first();
+
+        if ($kelas) {
+            \App\Models\Mahasiswa::create([
+                'user_id' => $user->id,
+                'kelas_id' => $kelas->id,
+                'nim' => 'TEMP' . str_pad((string) $user->id, 6, '0', STR_PAD_LEFT),
+                'nama' => $user->name,
+                'jenis_kelamin' => 'L',
+                'tanggal_lahir' => null,
+                'no_hp' => null,
+                'alamat' => null,
+                'angkatan' => date('Y'),
+            ]);
+        }
 
         event(new Registered($user));
 
