@@ -8,6 +8,7 @@ use App\Models\Mahasiswa;
 use App\Models\MataKuliah;
 use App\Models\Kelas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class PresensiController extends Controller
@@ -22,10 +23,27 @@ class PresensiController extends Controller
             'catatan' => 'nullable|string',
         ]);
 
-        $sesi = SesiPresensi::findOrFail($validated['sesi_presensi_id']);
+        $routeSesi = $request->route('sesi_presensi');
+        $routeSesiId = $routeSesi instanceof SesiPresensi ? $routeSesi->id : (int) $routeSesi;
+
+        if ($routeSesiId && $routeSesiId !== (int) $validated['sesi_presensi_id']) {
+            return back()->withErrors(['sesi_presensi_id' => 'Sesi presensi tidak sesuai dengan URL.']);
+        }
+
+        $sesi = SesiPresensi::with('jadwal')->findOrFail($validated['sesi_presensi_id']);
+        $dosenId = $request->user()->dosen?->id;
+
+        abort_if(! $dosenId, 403, 'Akun dosen belum terhubung dengan data dosen.');
+        abort_if($sesi->jadwal->dosen_id !== $dosenId, 403, 'Anda tidak memiliki akses ke sesi presensi ini.');
 
         if ($sesi->status !== 'OPEN' || now()->lt($sesi->opened_at) || now()->gt($sesi->expired_at)) {
             return back()->withErrors(['sesi_presensi_id' => 'Sesi presensi tidak tersedia.']);
+        }
+
+        $mahasiswa = Mahasiswa::findOrFail($validated['mahasiswa_id']);
+
+        if ($mahasiswa->kelas_id !== $sesi->jadwal->kelas_id) {
+            return back()->withErrors(['mahasiswa_id' => 'Mahasiswa tidak termasuk kelas pada jadwal sesi ini.']);
         }
 
         $validated['waktu_presensi'] = now();
@@ -92,11 +110,14 @@ class PresensiController extends Controller
 
     public function scan(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'token' => 'required|string',
         ]);
 
-        $sesi = SesiPresensi::where('token', $request->token)
+        $token = Str::upper(trim($validated['token']));
+
+        $sesi = SesiPresensi::with('jadwal.mataKuliah')
+            ->where('token', $token)
             ->where('status', 'OPEN')
             ->where('opened_at', '<=', now())
             ->where('expired_at', '>=', now())
@@ -108,19 +129,31 @@ class PresensiController extends Controller
 
         $mahasiswa = Mahasiswa::where('user_id', auth()->id())->firstOrFail();
 
-        Presensi::updateOrCreate(
-            [
-                'sesi_presensi_id' => $sesi->id,
-                'mahasiswa_id' => $mahasiswa->id,
-            ],
-            [
-                'status' => 'HADIR',
-                'metode' => 'QR',
-                'waktu_presensi' => now(),
-            ]
-        );
+        if ($mahasiswa->kelas_id !== $sesi->jadwal->kelas_id) {
+            return back()->withErrors(['token' => 'Token ini bukan untuk kelas Anda.']);
+        }
 
-        return redirect()->route('mahasiswa.presensi.history')->with('success', 'Presensi QR berhasil dicatat.');
+        $existingPresensi = Presensi::where('sesi_presensi_id', $sesi->id)
+            ->where('mahasiswa_id', $mahasiswa->id)
+            ->first();
+
+        if ($existingPresensi) {
+            return redirect()
+                ->route('mahasiswa.presensi.history')
+                ->with('success', 'Presensi Anda sudah tercatat sebelumnya untuk ' . $sesi->jadwal->mataKuliah->nama . '.');
+        }
+
+        Presensi::create([
+            'sesi_presensi_id' => $sesi->id,
+            'mahasiswa_id' => $mahasiswa->id,
+            'status' => 'HADIR',
+            'metode' => 'QR',
+            'waktu_presensi' => now(),
+        ]);
+
+        return redirect()
+            ->route('mahasiswa.presensi.history')
+            ->with('success', 'Presensi QR berhasil dicatat untuk ' . $sesi->jadwal->mataKuliah->nama . '.');
     }
 
     public function rekap(Request $request)

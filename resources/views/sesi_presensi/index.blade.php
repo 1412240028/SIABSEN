@@ -6,6 +6,14 @@
         </div>
     </x-slot>
 
+    @php
+        $statusClasses = [
+            'OPEN' => 'bg-green-100 text-green-800',
+            'CLOSED' => 'bg-gray-100 text-gray-800',
+            'CANCELLED' => 'bg-red-100 text-red-800',
+        ];
+    @endphp
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
@@ -28,7 +36,11 @@
                                     <td class="px-4 py-2">{{ $item->jadwal->kelas->nama_kelas }}</td>
                                     <td class="px-4 py-2">{{ $item->pertemuan_ke }}</td>
                                     <td class="px-4 py-2">{{ $item->tanggal->format('d M Y') }}</td>
-                                    <td class="px-4 py-2">{{ $item->status }}</td>
+                                    <td class="px-4 py-2">
+                                        <span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ $statusClasses[$item->status] ?? 'bg-gray-100 text-gray-700' }}">
+                                            {{ $item->status }}
+                                        </span>
+                                    </td>
                                     <td class="px-4 py-2 text-right">
                                         <a href="{{ route('dosen.sesi_presensi.show', $item) }}" class="text-indigo-600 hover:underline">Lihat</a>
                                     </td>

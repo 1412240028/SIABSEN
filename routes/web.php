@@ -9,7 +9,9 @@ use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\SesiPresensiController;
 use App\Http\Controllers\PresensiController;
+use App\Models\Jadwal as JadwalModel;
 use App\Models\Presensi;
+use App\Models\SesiPresensi as SesiPresensiModel;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,7 +35,67 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard Dosen
     Route::get('/dosen/dashboard', function () {
-        return view('dashboard-dosen');
+        $dosen = auth()->user()->dosen()->first();
+        $dayNames = [
+            0 => 'Minggu',
+            1 => 'Senin',
+            2 => 'Selasa',
+            3 => 'Rabu',
+            4 => 'Kamis',
+            5 => 'Jumat',
+            6 => 'Sabtu',
+        ];
+        $hariIni = $dayNames[now()->dayOfWeek];
+
+        $jadwalHariIni = collect();
+        $sesiAktif = collect();
+        $sesiTerbaru = collect();
+        $totalJadwal = 0;
+        $totalSesi = 0;
+
+        if ($dosen) {
+            $jadwalHariIni = JadwalModel::with(['mataKuliah', 'kelas'])
+                ->where('dosen_id', $dosen->id)
+                ->where('status', true)
+                ->where('hari', $hariIni)
+                ->orderBy('jam_mulai')
+                ->get();
+
+            $totalJadwal = JadwalModel::where('dosen_id', $dosen->id)
+                ->where('status', true)
+                ->count();
+
+            $sesiAktif = SesiPresensiModel::with(['jadwal.mataKuliah', 'jadwal.kelas'])
+                ->where('status', 'OPEN')
+                ->whereHas('jadwal', function ($query) use ($dosen) {
+                    $query->where('dosen_id', $dosen->id);
+                })
+                ->orderByDesc('opened_at')
+                ->limit(5)
+                ->get();
+
+            $sesiTerbaru = SesiPresensiModel::with(['jadwal.mataKuliah', 'jadwal.kelas'])
+                ->whereHas('jadwal', function ($query) use ($dosen) {
+                    $query->where('dosen_id', $dosen->id);
+                })
+                ->orderByDesc('tanggal')
+                ->limit(5)
+                ->get();
+
+            $totalSesi = SesiPresensiModel::whereHas('jadwal', function ($query) use ($dosen) {
+                $query->where('dosen_id', $dosen->id);
+            })->count();
+        }
+
+        return view('dashboard-dosen', compact(
+            'dosen',
+            'hariIni',
+            'jadwalHariIni',
+            'sesiAktif',
+            'sesiTerbaru',
+            'totalJadwal',
+            'totalSesi'
+        ));
     })->middleware('role:dosen')->name('dosen.dashboard');
 
     // Dashboard Mahasiswa
@@ -102,6 +164,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:dosen')->prefix('dosen')->name('dosen.')->group(function () {
         Route::resource('sesi_presensi', SesiPresensiController::class)->only(['index', 'create', 'store', 'show']);
         Route::patch('sesi_presensi/{sesi_presensi}/close', [SesiPresensiController::class, 'close'])->name('sesi_presensi.close');
+        Route::post('sesi_presensi/{sesi_presensi}/mark-alpha', [SesiPresensiController::class, 'markAlpha'])->name('sesi_presensi.mark-alpha');
         Route::post('sesi_presensi/{sesi_presensi}/presensi', [PresensiController::class, 'store'])->name('sesi_presensi.presensi.store');
     });
 
