@@ -13,6 +13,16 @@
                     <p class="text-sm text-gray-500 mt-1">
                         NIDN: {{ auth()->user()->dosen->nidn ?? '-' }}
                     </p>
+                    <div class="mt-6 grid gap-4 md:grid-cols-2">
+                        <a href="{{ route('dosen.sesi_presensi.index') }}" class="block rounded-lg border border-gray-200 bg-white px-4 py-6 shadow-sm hover:border-gray-300">
+                            <h3 class="text-lg font-semibold">Kelola Sesi Presensi</h3>
+                            <p class="mt-2 text-sm text-gray-600">Lihat sesi, buat sesi baru, dan tutup sesi presensi.</p>
+                        </a>
+                        <a href="{{ route('dosen.sesi_presensi.create') }}" class="block rounded-lg border border-gray-200 bg-white px-4 py-6 shadow-sm hover:border-gray-300">
+                            <h3 class="text-lg font-semibold">Buat Sesi Baru</h3>
+                            <p class="mt-2 text-sm text-gray-600">Buat token dan jadwal presensi untuk mahasiswa.</p>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

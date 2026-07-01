@@ -15,6 +15,37 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @if (auth()->user()->isAdmin())
+                        <x-nav-link :href="route('kelas.index')" :active="request()->routeIs('kelas.*')">
+                            Kelas
+                        </x-nav-link>
+                        <x-nav-link :href="route('mata_kuliah.index')" :active="request()->routeIs('mata_kuliah.*')">
+                            Mata Kuliah
+                        </x-nav-link>
+                        <x-nav-link :href="route('dosen.index')" :active="request()->routeIs('dosen.*')">
+                            Dosen
+                        </x-nav-link>
+                        <x-nav-link :href="route('mahasiswa.index')" :active="request()->routeIs('mahasiswa.*')">
+                            Mahasiswa
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.jadwal.index')" :active="request()->routeIs('admin.jadwal.*')">
+                            Jadwal
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.presensi.rekap')" :active="request()->routeIs('admin.presensi.rekap')">
+                            Rekap Presensi
+                        </x-nav-link>
+                    @elseif (auth()->user()->isDosen())
+                        <x-nav-link :href="route('dosen.sesi_presensi.index')" :active="request()->routeIs('dosen.sesi_presensi.*')">
+                            Sesi Presensi
+                        </x-nav-link>
+                    @elseif (auth()->user()->isMahasiswa())
+                        <x-nav-link :href="route('mahasiswa.presensi.history')" :active="request()->routeIs('mahasiswa.presensi.*')">
+                            Riwayat Presensi
+                        </x-nav-link>
+                        <x-nav-link :href="route('mahasiswa.presensi.scan.form')" :active="request()->routeIs('mahasiswa.presensi.scan.form')">
+                            Scan Presensi
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 

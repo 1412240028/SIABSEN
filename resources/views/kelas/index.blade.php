@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Data Kelas</h2>
@@ -27,9 +27,7 @@
                             <th class="px-4 py-2">Angkatan</th>
                             <th class="px-4 py-2">Kapasitas</th>
                             <th class="px-4 py-2">Status</th>
-                            @if (auth()->user()->isAdmin())
-                                <th class="px-4 py-2 text-right">Aksi</th>
-                            @endif
+                            <th class="px-4 py-2 text-right">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,8 +43,9 @@
                                         <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">Nonaktif</span>
                                     @endif
                                 </td>
-                                @if (auth()->user()->isAdmin())
-                                    <td class="px-4 py-2 text-right space-x-2">
+                                <td class="px-4 py-2 text-right space-x-2">
+                                    <a href="{{ route('kelas.show', $item) }}" class="text-indigo-600 hover:underline">Lihat</a>
+                                    @if (auth()->user()->isAdmin())
                                         <a href="{{ route('kelas.edit', $item) }}" class="text-indigo-600 hover:underline">Edit</a>
                                         <button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-kelas-deletion-{{ $item->id }}')" class="text-red-600 hover:underline">Hapus</button>
 
@@ -62,8 +61,8 @@
                                                 </div>
                                             </form>
                                         </x-modal>
-                                    </td>
-                                @endif
+                                    @endif
+                                </td>
                             </tr>
                         @empty
                             <tr><td colspan="5" class="px-4 py-6 text-center text-gray-500">Belum ada data kelas.</td></tr>

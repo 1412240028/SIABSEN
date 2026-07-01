@@ -14,6 +14,16 @@
                         NIM: {{ auth()->user()->mahasiswa->nim ?? '-' }} —
                         Kelas: {{ auth()->user()->mahasiswa->kelas->nama_kelas ?? '-' }}
                     </p>
+                    <div class="mt-6 grid gap-4 md:grid-cols-2">
+                        <a href="{{ route('mahasiswa.presensi.history') }}" class="block rounded-lg border border-gray-200 bg-white px-4 py-6 shadow-sm hover:border-gray-300">
+                            <h3 class="text-lg font-semibold">Lihat Riwayat Presensi</h3>
+                            <p class="mt-2 text-sm text-gray-600">Lihat absensi sebelumnya untuk setiap sesi presensi.</p>
+                        </a>
+                        <a href="{{ route('mahasiswa.presensi.scan.form') }}" class="block rounded-lg border border-gray-200 bg-white px-4 py-6 shadow-sm hover:border-gray-300">
+                            <h3 class="text-lg font-semibold">Scan Token Presensi</h3>
+                            <p class="mt-2 text-sm text-gray-600">Masukkan token untuk mencatat presensi QR.</p>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

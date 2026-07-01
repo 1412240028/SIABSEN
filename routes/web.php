@@ -6,6 +6,9 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MataKuliahController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\SesiPresensiController;
+use App\Http\Controllers\PresensiController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -55,6 +58,30 @@ Route::middleware('auth')->group(function () {
         Route::resource('mata_kuliah', MataKuliahController::class)->except(['index', 'show']);
         Route::resource('dosen', DosenController::class)->except(['index', 'show']);
         Route::resource('mahasiswa', MahasiswaController::class)->except(['index', 'show']);
+    });
+
+    // Admin only: jadwal manajemen
+    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::resource('jadwal', JadwalController::class);
+    });
+
+    // Dosen only: sesi presensi
+    Route::middleware('role:dosen')->prefix('dosen')->name('dosen.')->group(function () {
+        Route::resource('sesi_presensi', SesiPresensiController::class)->only(['index', 'create', 'store', 'show']);
+        Route::patch('sesi_presensi/{sesi_presensi}/close', [SesiPresensiController::class, 'close'])->name('sesi_presensi.close');
+        Route::post('sesi_presensi/{sesi_presensi}/presensi', [PresensiController::class, 'store'])->name('sesi_presensi.presensi.store');
+    });
+
+    // Mahasiswa only: presensi history and scan
+    Route::middleware('role:mahasiswa')->prefix('mahasiswa')->name('mahasiswa.')->group(function () {
+        Route::get('presensi/history', [PresensiController::class, 'history'])->name('presensi.history');
+        Route::get('presensi/scan', [PresensiController::class, 'showScanForm'])->name('presensi.scan.form');
+        Route::post('presensi/scan', [PresensiController::class, 'scan'])->name('presensi.scan');
+    });
+
+    // Admin only: rekap presensi
+    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('presensi/rekap', [PresensiController::class, 'rekap'])->name('presensi.rekap');
     });
 });
 
