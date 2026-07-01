@@ -44,20 +44,24 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Admin + Dosen: boleh lihat aja
-    Route::middleware('role:admin,dosen')->group(function () {
-        Route::resource('kelas', KelasController::class)->only(['index', 'show']);
-        Route::resource('mata_kuliah', MataKuliahController::class)->only(['index', 'show']);
-        Route::resource('dosen', DosenController::class)->only(['index', 'show']);
-        Route::resource('mahasiswa', MahasiswaController::class)->only(['index', 'show']);
-    });
-
     // Admin only: create, edit, delete
     Route::middleware('role:admin')->group(function () {
-        Route::resource('kelas', KelasController::class)->except(['index', 'show']);
+        Route::resource('kelas', KelasController::class)
+            ->parameters(['kelas' => 'kelas'])
+            ->except(['index', 'show']);
         Route::resource('mata_kuliah', MataKuliahController::class)->except(['index', 'show']);
         Route::resource('dosen', DosenController::class)->except(['index', 'show']);
         Route::resource('mahasiswa', MahasiswaController::class)->except(['index', 'show']);
+    });
+
+    // Admin + Dosen: boleh lihat aja
+    Route::middleware('role:admin,dosen')->group(function () {
+        Route::resource('kelas', KelasController::class)
+            ->parameters(['kelas' => 'kelas'])
+            ->only(['index', 'show']);
+        Route::resource('mata_kuliah', MataKuliahController::class)->only(['index', 'show']);
+        Route::resource('dosen', DosenController::class)->only(['index', 'show']);
+        Route::resource('mahasiswa', MahasiswaController::class)->only(['index', 'show']);
     });
 
     // Admin only: jadwal manajemen

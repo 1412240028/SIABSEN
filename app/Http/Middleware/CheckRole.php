@@ -14,10 +14,35 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        if (!$request->user() || !in_array($request->user()->role, $roles)) {
+        $user = $request->user();
+
+        if (!$user) {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        }
+
+        $effectiveRole = $this->resolveEffectiveRole($user);
+
+        if (!in_array($effectiveRole, $roles, true)) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
         return $next($request);
+    }
+
+    protected function resolveEffectiveRole($user): ?string
+    {
+        if (!empty($user->role)) {
+            return $user->role;
+        }
+
+        if ($user->dosen()->exists()) {
+            return 'dosen';
+        }
+
+        if ($user->mahasiswa()->exists()) {
+            return 'mahasiswa';
+        }
+
+        return null;
     }
 }
