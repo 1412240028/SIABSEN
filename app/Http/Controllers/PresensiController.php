@@ -15,6 +15,18 @@ class PresensiController extends Controller
 {
     public function store(Request $request)
     {
+        $dosenId = $request->user()->dosen?->id;
+        abort_if(! $dosenId, 403, 'Akun dosen belum terhubung dengan data dosen.');
+
+        $routeSesi = $request->route('sesi_presensi');
+        if ($routeSesi) {
+            $sessionInUrl = $routeSesi instanceof SesiPresensi
+                ? $routeSesi
+                : SesiPresensi::with('jadwal')->findOrFail($routeSesi);
+
+            abort_if($sessionInUrl->jadwal->dosen_id !== $dosenId, 403, 'Anda tidak memiliki akses ke sesi presensi ini.');
+        }
+
         $validated = $request->validate([
             'sesi_presensi_id' => 'required|exists:sesi_presensi,id',
             'mahasiswa_id' => 'required|exists:mahasiswa,id',
@@ -23,17 +35,14 @@ class PresensiController extends Controller
             'catatan' => 'nullable|string',
         ]);
 
-        $routeSesi = $request->route('sesi_presensi');
         $routeSesiId = $routeSesi instanceof SesiPresensi ? $routeSesi->id : (int) $routeSesi;
 
         if ($routeSesiId && $routeSesiId !== (int) $validated['sesi_presensi_id']) {
-            return back()->withErrors(['sesi_presensi_id' => 'Sesi presensi tidak sesuai dengan URL.']);
+            abort(403, 'Sesi presensi tidak sesuai dengan URL.');
         }
 
         $sesi = SesiPresensi::with('jadwal')->findOrFail($validated['sesi_presensi_id']);
-        $dosenId = $request->user()->dosen?->id;
 
-        abort_if(! $dosenId, 403, 'Akun dosen belum terhubung dengan data dosen.');
         abort_if($sesi->jadwal->dosen_id !== $dosenId, 403, 'Anda tidak memiliki akses ke sesi presensi ini.');
 
         if ($sesi->status !== 'OPEN' || now()->lt($sesi->opened_at) || now()->gt($sesi->expired_at)) {
@@ -140,7 +149,7 @@ class PresensiController extends Controller
         if ($existingPresensi) {
             return redirect()
                 ->route('mahasiswa.presensi.history')
-                ->with('success', 'Presensi Anda sudah tercatat sebelumnya untuk ' . $sesi->jadwal->mataKuliah->nama . '.');
+                ->with('info', 'Anda sudah melakukan presensi sebelumnya untuk mata kuliah ' . $sesi->jadwal->mataKuliah->nama . ' (Pertemuan Ke-' . $sesi->pertemuan_ke . ').');
         }
 
         Presensi::create([
@@ -153,7 +162,7 @@ class PresensiController extends Controller
 
         return redirect()
             ->route('mahasiswa.presensi.history')
-            ->with('success', 'Presensi QR berhasil dicatat untuk ' . $sesi->jadwal->mataKuliah->nama . '.');
+            ->with('success', 'Presensi QR berhasil dicatat untuk mata kuliah ' . $sesi->jadwal->mataKuliah->nama . ' (Pertemuan Ke-' . $sesi->pertemuan_ke . ') pada pukul ' . now()->format('H:i') . '. Silakan periksa daftar riwayat presensi Anda di bawah ini.');
     }
 
     public function rekap(Request $request)

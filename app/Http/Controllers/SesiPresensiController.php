@@ -34,7 +34,7 @@ class SesiPresensiController extends Controller
         return view('sesi_presensi.index', compact('sesi'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $dosenId = auth()->user()->dosen?->id;
 
@@ -45,7 +45,9 @@ class SesiPresensiController extends Controller
             ->orderBy('jam_mulai')
             ->get();
 
-        return view('sesi_presensi.create', compact('jadwal'));
+        $selectedJadwalId = $request->query('jadwal_id');
+
+        return view('sesi_presensi.create', compact('jadwal', 'selectedJadwalId'));
     }
 
     public function store(Request $request)

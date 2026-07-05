@@ -12,6 +12,10 @@ use App\Http\Controllers\PresensiController;
 use App\Models\Jadwal as JadwalModel;
 use App\Models\Presensi;
 use App\Models\SesiPresensi as SesiPresensiModel;
+use App\Models\Mahasiswa;
+use App\Models\Dosen;
+use App\Models\Kelas;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,7 +34,36 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard Admin
     Route::get('/admin/dashboard', function () {
-        return view('dashboard-admin');
+        $totalMahasiswa = Mahasiswa::count();
+        $totalDosen = Dosen::count();
+        $kelasAktif = Kelas::where('status', true)->count();
+        $totalKapasitas = Kelas::where('status', true)->sum('kapasitas');
+
+        $sesiHariIni = SesiPresensiModel::whereDate('tanggal', today())->count();
+        $sesiStatusCounts = SesiPresensiModel::whereDate('tanggal', today())
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        $recentActivity = SesiPresensiModel::with(['jadwal.mataKuliah', 'jadwal.kelas', 'jadwal.dosen', 'presensi'])
+            ->orderByDesc('tanggal')
+            ->limit(5)
+            ->get();
+
+        $pendingIzin = \App\Models\PengajuanIzin::where('status', 'PENDING')->count();
+        $pendingKomplain = \App\Models\KomplainPresensi::where('status', 'PENDING')->count();
+
+        return view('dashboard-admin', compact(
+            'totalMahasiswa',
+            'totalDosen',
+            'kelasAktif',
+            'totalKapasitas',
+            'sesiHariIni',
+            'sesiStatusCounts',
+            'recentActivity',
+            'pendingIzin',
+            'pendingKomplain'
+        ));
     })->middleware('role:admin')->name('admin.dashboard');
 
     // Dashboard Dosen
@@ -87,6 +120,8 @@ Route::middleware('auth')->group(function () {
             })->count();
         }
 
+        $izinTerbaru = \App\Models\PengajuanIzin::with('user')->where('status', 'PENDING')->latest()->take(3)->get();
+
         return view('dashboard-dosen', compact(
             'dosen',
             'hariIni',
@@ -94,7 +129,8 @@ Route::middleware('auth')->group(function () {
             'sesiAktif',
             'sesiTerbaru',
             'totalJadwal',
-            'totalSesi'
+            'totalSesi',
+            'izinTerbaru'
         ));
     })->middleware('role:dosen')->name('dosen.dashboard');
 
@@ -137,12 +173,15 @@ Route::middleware('auth')->group(function () {
                 ->get();
         }
 
+        $pengumuman = \App\Models\Pengumuman::where('is_active', true)->latest()->take(3)->get();
+
         return view('dashboard-mahasiswa', compact(
             'mahasiswa',
             'statusCounts',
             'recentPresensi',
             'totalPresensi',
-            'attendancePercentage'
+            'attendancePercentage',
+            'pengumuman'
         ));
     })->middleware('role:mahasiswa')->name('mahasiswa.dashboard');
 
@@ -190,9 +229,29 @@ Route::middleware('auth')->group(function () {
         Route::post('presensi/scan', [PresensiController::class, 'scan'])->name('presensi.scan');
     });
 
-    // Admin only: rekap presensi
+    // Admin only: rekap presensi, pengumuman, kalender
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('presensi/rekap', [PresensiController::class, 'rekap'])->name('presensi.rekap');
+        
+        Route::resource('pengumuman', \App\Http\Controllers\PengumumanController::class);
+        Route::resource('kalender', \App\Http\Controllers\KalenderAkademikController::class);
+    });
+
+    // Izin & Komplain (All roles have different views/actions inside controller, but we group them)
+    Route::prefix('izin')->name('izin.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\PengajuanIzinController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\PengajuanIzinController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\PengajuanIzinController::class, 'store'])->name('store');
+        Route::post('/{izin}/approve', [\App\Http\Controllers\PengajuanIzinController::class, 'approve'])->name('approve');
+        Route::post('/{izin}/reject', [\App\Http\Controllers\PengajuanIzinController::class, 'reject'])->name('reject');
+    });
+
+    Route::prefix('komplain')->name('komplain.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\KomplainPresensiController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\KomplainPresensiController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\KomplainPresensiController::class, 'store'])->name('store');
+        Route::post('/{komplain}/resolve', [\App\Http\Controllers\KomplainPresensiController::class, 'resolve'])->name('resolve');
+        Route::post('/{komplain}/reject', [\App\Http\Controllers\KomplainPresensiController::class, 'reject'])->name('reject');
     });
 });
 
