@@ -10,12 +10,12 @@ class PengumumanController extends Controller
     public function index()
     {
         $pengumuman = Pengumuman::latest()->get();
-        return view('pengumuman.index', compact('pengumuman'));
+        return view('modules.Academic.pengumuman.index', compact('pengumuman'));
     }
 
     public function create()
     {
-        return view('pengumuman.create');
+        return view('modules.Academic.pengumuman.create');
     }
 
     public function store(Request $request)
@@ -34,12 +34,12 @@ class PengumumanController extends Controller
 
     public function show(Pengumuman $pengumuman)
     {
-        return view('pengumuman.show', compact('pengumuman'));
+        return view('modules.Academic.pengumuman.show', compact('pengumuman'));
     }
 
     public function edit(Pengumuman $pengumuman)
     {
-        return view('pengumuman.edit', compact('pengumuman'));
+        return view('modules.Academic.pengumuman.edit', compact('pengumuman'));
     }
 
     public function update(Request $request, Pengumuman $pengumuman)

@@ -109,12 +109,12 @@ class PresensiController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('presensi.history', compact('presensi', 'statusOptions', 'mataKuliahOptions', 'filters'));
+        return view('modules.Academic.presensi.history', compact('presensi', 'statusOptions', 'mataKuliahOptions', 'filters'));
     }
 
     public function showScanForm()
     {
-        return view('presensi.scan');
+        return view('modules.Academic.presensi.scan');
     }
 
     public function scan(Request $request)
@@ -226,7 +226,7 @@ class PresensiController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        return view('presensi.rekap', compact(
+        return view('modules.Academic.presensi.rekap', compact(
             'rekap',
             'kelasOptions',
             'mataKuliahOptions',

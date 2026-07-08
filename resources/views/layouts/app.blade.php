@@ -44,7 +44,7 @@
         <div class="flex h-screen w-full">
             
             {{-- SideNavBar --}}
-            <aside class="h-screen w-sidebar-expanded fixed left-0 top-0 bg-slate-900 border-r border-slate-800 z-50 flex flex-col p-4 transition-all duration-200 ease-in-out hidden md:flex">
+            <aside class="h-screen w-sidebar-expanded fixed left-0 top-0 bg-slate-900 border-r border-slate-800 z-50 flex-col p-4 transition-all duration-200 ease-in-out hidden md:flex">
                 {{-- Header/Brand --}}
                 <div class="flex items-center gap-3 mb-8 px-2 mt-2">
                     <div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center shrink-0">

@@ -17,12 +17,12 @@ class MataKuliahController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('mata_kuliah.index', compact('mataKuliah'));
+        return view('modules.Academic.mata_kuliah.index', compact('mataKuliah'));
     }
 
     public function create()
     {
-        return view('mata_kuliah.create');
+        return view('modules.Academic.mata_kuliah.create');
     }
 
     public function store(Request $request)
@@ -41,12 +41,12 @@ class MataKuliahController extends Controller
 
     public function show(MataKuliah $mata_kuliah)
     {
-        return view('mata_kuliah.show', ['mataKuliah' => $mata_kuliah]);
+        return view('modules.Academic.mata_kuliah.show', ['mataKuliah' => $mata_kuliah]);
     }
 
     public function edit(MataKuliah $mata_kuliah)
     {
-        return view('mata_kuliah.edit', ['mataKuliah' => $mata_kuliah]);
+        return view('modules.Academic.mata_kuliah.edit', ['mataKuliah' => $mata_kuliah]);
     }
 
     public function update(Request $request, MataKuliah $mata_kuliah)

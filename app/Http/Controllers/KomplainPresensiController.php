@@ -13,7 +13,7 @@ class KomplainPresensiController extends Controller
         $user = auth()->user();
         if ($user->role === 'mahasiswa') {
             $komplain = KomplainPresensi::where('mahasiswa_id', $user->mahasiswa->id)->latest()->get();
-            return view('komplain.mahasiswa_index', compact('komplain'));
+            return view('modules.Academic.komplain.mahasiswa_index', compact('komplain'));
         } elseif ($user->role === 'dosen') {
             $jadwalIds = $user->dosen->jadwal()->pluck('id');
             $sesiIds = SesiPresensi::whereIn('jadwal_id', $jadwalIds)->pluck('id');
@@ -21,11 +21,11 @@ class KomplainPresensiController extends Controller
                 ->with('mahasiswa', 'sesiPresensi.jadwal.mataKuliah')
                 ->latest()
                 ->get();
-            return view('komplain.dosen_index', compact('komplain'));
+            return view('modules.Academic.komplain.dosen_index', compact('komplain'));
         }
         
         $komplain = KomplainPresensi::with('mahasiswa', 'sesiPresensi.jadwal.mataKuliah')->latest()->get();
-        return view('komplain.admin_index', compact('komplain'));
+        return view('modules.Academic.komplain.admin_index', compact('komplain'));
     }
 
     public function create()
@@ -35,7 +35,7 @@ class KomplainPresensiController extends Controller
             $q->where('kelas_id', $mahasiswa->kelas_id);
         })->latest('tanggal')->get();
         
-        return view('komplain.create', compact('sesi'));
+        return view('modules.Academic.komplain.create', compact('sesi'));
     }
 
     public function store(Request $request)

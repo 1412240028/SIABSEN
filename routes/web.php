@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
         $pendingIzin = \App\Models\PengajuanIzin::where('status', 'PENDING')->count();
         $pendingKomplain = \App\Models\KomplainPresensi::where('status', 'PENDING')->count();
 
-        return view('dashboard-admin', compact(
+        return view('modules.Academic.dashboards.dashboard-admin', compact(
             'totalMahasiswa',
             'totalDosen',
             'kelasAktif',
@@ -122,7 +122,7 @@ Route::middleware('auth')->group(function () {
 
         $izinTerbaru = \App\Models\PengajuanIzin::with('user')->where('status', 'PENDING')->latest()->take(3)->get();
 
-        return view('dashboard-dosen', compact(
+        return view('modules.Academic.dashboards.dashboard-dosen', compact(
             'dosen',
             'hariIni',
             'jadwalHariIni',
@@ -175,7 +175,7 @@ Route::middleware('auth')->group(function () {
 
         $pengumuman = \App\Models\Pengumuman::where('is_active', true)->latest()->take(3)->get();
 
-        return view('dashboard-mahasiswa', compact(
+        return view('modules.Academic.dashboards.dashboard-mahasiswa', compact(
             'mahasiswa',
             'statusCounts',
             'recentPresensi',

@@ -9,23 +9,23 @@ class FoodifyController extends Controller
 {
     public function index()
     {
-        return view('foodify.beranda');
+        return view('modules.Foodify.beranda');
     }
 
     public function kategori()
     {
-        return view('foodify.kategori');
+        return view('modules.Foodify.kategori');
     }
 
     public function produk()
     {
         $produk = DB::table('produk')->orderBy('id_produk', 'desc')->get();
-        return view('foodify.produk', compact('produk'));
+        return view('modules.Foodify.produk', compact('produk'));
     }
 
     public function profil()
     {
-        return view('foodify.profil');
+        return view('modules.Foodify.profil');
     }
 
     public function pendaftaran(Request $request)
@@ -40,7 +40,7 @@ class FoodifyController extends Controller
 
         $members = DB::table('member')->orderBy('id_member', 'desc')->get();
 
-        return view('foodify.pendaftaran', compact('members', 'edit_mode', 'data_edit'));
+        return view('modules.Foodify.pendaftaran', compact('members', 'edit_mode', 'data_edit'));
     }
 
     public function storeMember(Request $request)

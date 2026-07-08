@@ -22,13 +22,13 @@ class MahasiswaController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('mahasiswa.index', compact('mahasiswa'));
+        return view('modules.Academic.mahasiswa.index', compact('mahasiswa'));
     }
 
     public function create()
     {
         $kelas = Kelas::where('status', true)->orderBy('nama_kelas')->get();
-        return view('mahasiswa.create', compact('kelas'));
+        return view('modules.Academic.mahasiswa.create', compact('kelas'));
     }
 
     public function store(Request $request)
@@ -73,14 +73,14 @@ class MahasiswaController extends Controller
     public function show(Mahasiswa $mahasiswa)
     {
         $mahasiswa->load(['user', 'kelas']);
-        return view('mahasiswa.show', compact('mahasiswa'));
+        return view('modules.Academic.mahasiswa.show', compact('mahasiswa'));
     }
 
     public function edit(Mahasiswa $mahasiswa)
     {
         $mahasiswa->load('user');
         $kelas = Kelas::where('status', true)->orderBy('nama_kelas')->get();
-        return view('mahasiswa.edit', compact('mahasiswa', 'kelas'));
+        return view('modules.Academic.mahasiswa.edit', compact('mahasiswa', 'kelas'));
     }
 
     public function update(Request $request, Mahasiswa $mahasiswa)

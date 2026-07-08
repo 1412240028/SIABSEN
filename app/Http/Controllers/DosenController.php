@@ -21,12 +21,12 @@ class DosenController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('dosen.index', compact('dosen'));
+        return view('modules.Academic.dosen.index', compact('dosen'));
     }
 
     public function create()
     {
-        return view('dosen.create');
+        return view('modules.Academic.dosen.create');
     }
 
     public function store(Request $request)
@@ -65,13 +65,13 @@ class DosenController extends Controller
     public function show(Dosen $dosen)
     {
         $dosen->load('user');
-        return view('dosen.show', compact('dosen'));
+        return view('modules.Academic.dosen.show', compact('dosen'));
     }
 
     public function edit(Dosen $dosen)
     {
         $dosen->load('user');
-        return view('dosen.edit', compact('dosen'));
+        return view('modules.Academic.dosen.edit', compact('dosen'));
     }
 
     public function update(Request $request, Dosen $dosen)

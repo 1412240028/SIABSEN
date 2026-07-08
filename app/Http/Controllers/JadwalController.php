@@ -27,7 +27,7 @@ class JadwalController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('jadwal.index', compact('jadwal'));
+        return view('modules.Academic.jadwal.index', compact('jadwal'));
     }
 
     public function create()
@@ -36,7 +36,7 @@ class JadwalController extends Controller
         $kelas = Kelas::where('status', true)->orderBy('nama_kelas')->get();
         $mataKuliah = MataKuliah::where('status', true)->orderBy('kode')->get();
 
-        return view('jadwal.create', compact('dosens', 'kelas', 'mataKuliah'));
+        return view('modules.Academic.jadwal.create', compact('dosens', 'kelas', 'mataKuliah'));
     }
 
     public function store(Request $request)
@@ -63,7 +63,7 @@ class JadwalController extends Controller
     {
         $jadwal->load(['dosen', 'kelas', 'mataKuliah']);
 
-        return view('jadwal.show', compact('jadwal'));
+        return view('modules.Academic.jadwal.show', compact('jadwal'));
     }
 
     public function edit(Jadwal $jadwal)
@@ -72,7 +72,7 @@ class JadwalController extends Controller
         $kelas = Kelas::where('status', true)->orderBy('nama_kelas')->get();
         $mataKuliah = MataKuliah::where('status', true)->orderBy('kode')->get();
 
-        return view('jadwal.edit', compact('jadwal', 'dosens', 'kelas', 'mataKuliah'));
+        return view('modules.Academic.jadwal.edit', compact('jadwal', 'dosens', 'kelas', 'mataKuliah'));
     }
 
     public function update(Request $request, Jadwal $jadwal)

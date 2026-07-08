@@ -16,12 +16,12 @@ class KelasController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('kelas.index', compact('kelas'));
+        return view('modules.Academic.kelas.index', compact('kelas'));
     }
 
     public function create()
     {
-        return view('kelas.create');
+        return view('modules.Academic.kelas.create');
     }
 
     public function store(Request $request)
@@ -40,12 +40,12 @@ class KelasController extends Controller
 
     public function show(Kelas $kelas)
     {
-        return view('kelas.show', compact('kelas'));
+        return view('modules.Academic.kelas.show', compact('kelas'));
     }
 
     public function edit(Kelas $kelas)
     {
-        return view('kelas.edit', compact('kelas'));
+        return view('modules.Academic.kelas.edit', compact('kelas'));
     }
 
     public function update(Request $request, Kelas $kelas)

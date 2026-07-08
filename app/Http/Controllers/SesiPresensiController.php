@@ -31,7 +31,7 @@ class SesiPresensiController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('sesi_presensi.index', compact('sesi'));
+        return view('modules.Academic.sesi_presensi.index', compact('sesi'));
     }
 
     public function create(Request $request)
@@ -47,7 +47,7 @@ class SesiPresensiController extends Controller
 
         $selectedJadwalId = $request->query('jadwal_id');
 
-        return view('sesi_presensi.create', compact('jadwal', 'selectedJadwalId'));
+        return view('modules.Academic.sesi_presensi.create', compact('jadwal', 'selectedJadwalId'));
     }
 
     public function store(Request $request)
@@ -126,7 +126,7 @@ class SesiPresensiController extends Controller
             ? QrCode::size(220)->generate($sesiPresensi->token)
             : null;
 
-        return view('sesi_presensi.show', compact(
+        return view('modules.Academic.sesi_presensi.show', compact(
             'sesiPresensi',
             'mahasiswa',
             'qrCode',

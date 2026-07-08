@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Portal Akademik — UTS & UAS Project</title>
-    <meta name="description" content="Portal navigasi project UTS (Foodify) dan UAS (Siabsen) — Final Exam Submission">
+    <title>Portal Navigasi — UTS & UAS Project</title>
+    <meta name="description" content="Portal navigasi project UTS (Foodify) dan UAS (Siabsen)>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -148,9 +148,9 @@
     <div class="wrap">
         <header class="header">
             <div class="badge"><span class="badge-dot"></span> Final Project — Pemrograman Web</div>
-            <h1>Project Portfolio</h1>
+            <h1>Portal Navigasi Project</h1>
             <p class="subtitle">
-                Kumpulan project <strong>UTS</strong> dan <strong>UAS</strong> mata kuliah Pemrograman Web. Pilih salah satu project di bawah untuk melihat detail.
+                Kumpulan project <strong>UTS</strong> dan <strong>UAS</strong> mata kuliah Pemrograman Web.
             </p>
         </header>
 

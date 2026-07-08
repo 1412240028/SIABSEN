@@ -10,12 +10,12 @@ class KalenderAkademikController extends Controller
     public function index()
     {
         $kalender = KalenderAkademik::orderBy('tanggal_mulai')->get();
-        return view('kalender.index', compact('kalender'));
+        return view('modules.Academic.kalender.index', compact('kalender'));
     }
 
     public function create()
     {
-        return view('kalender.create');
+        return view('modules.Academic.kalender.create');
     }
 
     public function store(Request $request)
@@ -34,7 +34,7 @@ class KalenderAkademikController extends Controller
 
     public function edit(KalenderAkademik $kalender)
     {
-        return view('kalender.edit', compact('kalender'));
+        return view('modules.Academic.kalender.edit', compact('kalender'));
     }
 
     public function update(Request $request, KalenderAkademik $kalender)
