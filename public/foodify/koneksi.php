@@ -2,7 +2,7 @@
 $host = "127.0.0.1";
 $user = "root";
 $pass = "";
-$db   = "foodify_db";
+$db   = "siabsen";
 
 $conn = mysqli_connect($host, $user, $pass, $db);
 
