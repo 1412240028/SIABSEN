@@ -256,3 +256,15 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+// Foodify Routes
+Route::prefix('foodify')->name('foodify.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\FoodifyController::class, 'index'])->name('beranda');
+    Route::get('/kategori', [\App\Http\Controllers\FoodifyController::class, 'kategori'])->name('kategori');
+    Route::get('/produk', [\App\Http\Controllers\FoodifyController::class, 'produk'])->name('produk');
+    Route::get('/profil', [\App\Http\Controllers\FoodifyController::class, 'profil'])->name('profil');
+    Route::get('/pendaftaran', [\App\Http\Controllers\FoodifyController::class, 'pendaftaran'])->name('pendaftaran');
+    Route::post('/pendaftaran/tambah', [\App\Http\Controllers\FoodifyController::class, 'storeMember'])->name('pendaftaran.store');
+    Route::post('/pendaftaran/update', [\App\Http\Controllers\FoodifyController::class, 'updateMember'])->name('pendaftaran.update');
+    Route::get('/pendaftaran/hapus', [\App\Http\Controllers\FoodifyController::class, 'deleteMember'])->name('pendaftaran.delete');
+});
