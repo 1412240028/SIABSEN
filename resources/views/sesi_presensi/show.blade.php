@@ -248,10 +248,8 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-slate-600 font-label-sm text-xs">
-                                    @if($absen && $absen->metode === 'QR_CODE')
+                                    @if($absen && $absen->metode === 'QR')
                                         <span class="inline-flex items-center gap-1 text-primary"><span class="material-symbols-outlined text-[16px]">qr_code_scanner</span> QR</span>
-                                    @elseif($absen && $absen->metode === 'TOKEN')
-                                        <span class="inline-flex items-center gap-1 text-primary"><span class="material-symbols-outlined text-[16px]">key</span> Token</span>
                                     @elseif($absen && $absen->metode === 'MANUAL')
                                         <span class="inline-flex items-center gap-1 text-amber-600"><span class="material-symbols-outlined text-[16px]">edit_note</span> Manual</span>
                                     @else

@@ -1,0 +1,23 @@
+{
+  "name": "foodify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node index.js",
+    "build": "echo \"Build tidak diperlukan untuk proyek ini\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1412240028/Foodify.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/1412240028/Foodify/issues"
+  },
+  "homepage": "https://github.com/1412240028/Foodify#readme"
+}

@@ -43,7 +43,7 @@
                     <div class="relative w-full aspect-[4/3] sm:aspect-video bg-slate-900 rounded-xl overflow-hidden border border-slate-200 group flex-grow min-h-[300px]">
                         
                         <!-- Video Feed -->
-                        <video id="qr-video" class="w-full h-full object-cover" muted playsinline></video>
+                        <div id="qr-video" class="w-full h-full object-cover"></div>
                         
                         <!-- Overlay when inactive -->
                         <div id="video-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-800/80 backdrop-blur-sm text-slate-300">

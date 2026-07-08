@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Foodify - Website Penjualan Makanan</title>
+  </head>
+  <body>
+    <table width="100%" border="1">
+      <tr>
+        <td align="center">
+          <h1>FOODIFY</h1>
+          <p>Website Penjualan Makanan Online</p>
+        </td>
+      </tr>
+    </table>
+
+    <table width="100%" border="1">
+      <tr>
+        <td width="150" valign="top" bgcolor="orange">
+          <iframe
+            src="pages/navbar.html"
+            width="150"
+            height="500"
+            frameborder="0"
+            scrolling="no"
+          ></iframe>
+        </td>
+
+        <td valign="top">
+          <iframe
+            src="pages/beranda.html"
+            name="konten"
+            width="100%"
+            height="500"
+            frameborder="0"
+          ></iframe>
+        </td>
+      </tr>
+    </table>
+
+    <table width="100%" border="1">
+      <tr>
+        <td align="center">
+          <i>&copy; 2026 Foodify - Food Marketplace</i>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
