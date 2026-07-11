@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 class CreateTestAccountsCommand extends Command
 {
     protected $signature = 'app:create-test-accounts';
+
     protected $description = 'Create admin, dosen, and mahasiswa test accounts';
 
     public function handle(): int

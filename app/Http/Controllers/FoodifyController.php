@@ -20,6 +20,7 @@ class FoodifyController extends Controller
     public function produk()
     {
         $produk = DB::table('produk')->orderBy('id_produk', 'desc')->get();
+
         return view('modules.Foodify.produk', compact('produk'));
     }
 
@@ -45,7 +46,7 @@ class FoodifyController extends Controller
 
     public function storeMember(Request $request)
     {
-        $tanggal_lahir = $request->thn . '-' . str_pad($request->bln, 2, '0', STR_PAD_LEFT) . '-' . str_pad($request->tgl, 2, '0', STR_PAD_LEFT);
+        $tanggal_lahir = $request->thn.'-'.str_pad($request->bln, 2, '0', STR_PAD_LEFT).'-'.str_pad($request->tgl, 2, '0', STR_PAD_LEFT);
 
         DB::table('member')->insert([
             'nama' => $request->nama,
@@ -53,7 +54,7 @@ class FoodifyController extends Controller
             'nohp' => $request->nohp,
             'alamat' => $request->alamat,
             'jenis_kelamin' => $request->jk,
-            'tanggal_lahir' => $tanggal_lahir
+            'tanggal_lahir' => $tanggal_lahir,
         ]);
 
         return redirect()->route('foodify.pendaftaran')->with('success', 'Member berhasil ditambahkan');
@@ -61,7 +62,7 @@ class FoodifyController extends Controller
 
     public function updateMember(Request $request)
     {
-        $tanggal_lahir = $request->thn . '-' . str_pad($request->bln, 2, '0', STR_PAD_LEFT) . '-' . str_pad($request->tgl, 2, '0', STR_PAD_LEFT);
+        $tanggal_lahir = $request->thn.'-'.str_pad($request->bln, 2, '0', STR_PAD_LEFT).'-'.str_pad($request->tgl, 2, '0', STR_PAD_LEFT);
 
         DB::table('member')->where('id_member', $request->id_member)->update([
             'nama' => $request->nama,
@@ -69,7 +70,7 @@ class FoodifyController extends Controller
             'nohp' => $request->nohp,
             'alamat' => $request->alamat,
             'jenis_kelamin' => $request->jk,
-            'tanggal_lahir' => $tanggal_lahir
+            'tanggal_lahir' => $tanggal_lahir,
         ]);
 
         return redirect()->route('foodify.pendaftaran')->with('success', 'Member berhasil diubah');
@@ -78,6 +79,7 @@ class FoodifyController extends Controller
     public function deleteMember(Request $request)
     {
         DB::table('member')->where('id_member', $request->hapus)->delete();
+
         return redirect()->route('foodify.pendaftaran')->with('success', 'Member berhasil dihapus');
     }
 }

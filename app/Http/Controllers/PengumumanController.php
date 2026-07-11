@@ -10,6 +10,7 @@ class PengumumanController extends Controller
     public function index()
     {
         $pengumuman = Pengumuman::latest()->get();
+
         return view('modules.Academic.pengumuman.index', compact('pengumuman'));
     }
 
@@ -24,7 +25,7 @@ class PengumumanController extends Controller
             'judul' => 'required|string|max:255',
             'konten' => 'required|string',
             'kategori' => 'required|in:Penting,Akademik,Umum',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
         ]);
 
         Pengumuman::create($request->all());
@@ -48,12 +49,12 @@ class PengumumanController extends Controller
             'judul' => 'required|string|max:255',
             'konten' => 'required|string',
             'kategori' => 'required|in:Penting,Akademik,Umum',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
         ]);
 
         $data = $request->all();
         $data['is_active'] = $request->has('is_active');
-        
+
         $pengumuman->update($data);
 
         return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil diubah.');
@@ -62,6 +63,7 @@ class PengumumanController extends Controller
     public function destroy(Pengumuman $pengumuman)
     {
         $pengumuman->delete();
+
         return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil dihapus.');
     }
 }

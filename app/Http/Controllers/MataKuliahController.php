@@ -52,7 +52,7 @@ class MataKuliahController extends Controller
     public function update(Request $request, MataKuliah $mata_kuliah)
     {
         $validated = $request->validate([
-            'kode' => 'required|string|max:20|unique:mata_kuliah,kode,' . $mata_kuliah->id,
+            'kode' => 'required|string|max:20|unique:mata_kuliah,kode,'.$mata_kuliah->id,
             'nama' => 'required|string|max:100',
             'sks' => 'required|integer|min:1|max:6',
             'status' => 'required|boolean',

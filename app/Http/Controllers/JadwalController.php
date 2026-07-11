@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Jadwal;
 use App\Models\Dosen;
+use App\Models\Jadwal;
 use App\Models\Kelas;
 use App\Models\MataKuliah;
 use Illuminate\Http\Request;

@@ -1,6 +1,9 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+    <div class="mb-6 text-center">
+        <h2 class="font-headline-xl text-headline-xl font-bold text-on-surface">Lupa Password?</h2>
+        <p class="text-on-surface-variant text-body-sm mt-1">
+            {{ __('Masukkan alamat email Anda dan kami akan mengirimkan tautan untuk mereset password.') }}
+        </p>
     </div>
 
     <!-- Session Status -->
@@ -17,8 +20,11 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
+            <a class="underline text-sm font-label-medium text-on-surface-variant hover:text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors mr-4" href="{{ route('login') }}">
+                {{ __('Batal') }}
+            </a>
             <x-primary-button>
-                {{ __('Email Password Reset Link') }}
+                {{ __('Kirim Link Reset') }}
             </x-primary-button>
         </div>
     </form>

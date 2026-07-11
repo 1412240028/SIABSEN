@@ -84,11 +84,11 @@ class UserSeeder extends Seeder
         foreach ([$kelasA->id => $mahasiswaKelasA, $kelasB->id => $mahasiswaKelasB] as $kelasId => $list) {
             foreach ($list as $mhs) {
                 $emailSlug = strtolower(str_replace(' ', '.', $mhs['nama']));
-                $nimGenerated = '2024' . str_pad($nim, 4, '0', STR_PAD_LEFT);
+                $nimGenerated = '2024'.str_pad($nim, 4, '0', STR_PAD_LEFT);
 
                 $user = User::create([
                     'name' => $mhs['nama'],
-                    'email' => $emailSlug . '@student.unirow.ac.id',
+                    'email' => $emailSlug.'@student.unirow.ac.id',
                     'password' => Hash::make('password'),
                     'role' => 'mahasiswa',
                 ]);
@@ -99,8 +99,8 @@ class UserSeeder extends Seeder
                     'nim' => $nimGenerated,
                     'nama' => $mhs['nama'],
                     'jenis_kelamin' => $mhs['jk'],
-                    'tanggal_lahir' => '2006-0' . rand(1, 9) . '-1' . rand(0, 9),
-                    'no_hp' => '0812' . rand(10000000, 99999999),
+                    'tanggal_lahir' => '2006-0'.rand(1, 9).'-1'.rand(0, 9),
+                    'no_hp' => '0812'.rand(10000000, 99999999),
                     'alamat' => 'Tuban, Jawa Timur',
                     'angkatan' => 2024,
                 ]);

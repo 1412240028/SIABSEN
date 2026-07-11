@@ -1,118 +1,124 @@
 @extends('modules.Foodify.app', ['bgColor' => 'pink'])
 
 @section('content')
-<center>
-    <font face="Verdana, sans-serif" color="#27AE60" size="5">
-        <b>PROFIL FOODIFY</b>
-    </font>
-</center>
+    <h2 align="center">HALAMAN PROFIL</h2>
+    <hr />
 
-<br>
-<hr size="1" color="#E0E0E0">
-<br>
+    <p align="center">Kenalan dulu sama <b>FOODIFY</b>!</p>
+    <p align="center">
+      <b>"Foodify tuh lahir dari keresahan sederhana para mahasiswa/pekerja rantau"</b> susahnya nyari makanan enak yang harganya masuk akal. Mulai dari situ, Foodify dibuat sebagai platform yang ngumpulin berbagai pilihan menu makanan dan minuman dalam satu tempat, biar kamu nggak perlu ribet nyari-nyari sendiri.
+    </p>
 
-<p align="center">
-    <font face="Arial, sans-serif" color="#34495E" size="3">
-        Kenalan lebih dekat sama <b>Foodify</b>, platform yang siap bantu
-        penuhi kebutuhan perut kamu kapan aja.
-    </font>
-</p>
+    <hr />
 
-<hr>
+    <h3 align="center">PROFIL FOODIFY</h3>
 
-<center>
-    <font face="Verdana, sans-serif" color="#2C3E50" size="4">
-        <b>Visi &amp; Misi Kami</b>
-    </font>
-</center>
+    <table
+      border="1"
+      width="700"
+      align="center"
+      cellpadding="6"
+      cellspacing="0"
+    >
+      <tr>
+        <th width="180">NAMA</th>
+        <td>Foodify</td>
+      </tr>
 
-<br>
+      <tr>
+        <th>JENIS LAYANAN</th>
+        <td>Platform Penjualan Makanan &amp; Minuman Online</td>
+      </tr>
 
-<table border="1" bordercolor="#E0E0E0" width="85%" align="center" cellpadding="10" cellspacing="0">
-    <tr bgcolor="orange">
-        <th><font color="#FFFFFF"><b>Visi</b></font></th>
-        <th><font color="#FFFFFF"><b>Misi</b></font></th>
-    </tr>
+      <tr>
+        <th>BERDIRI SEJAK</th>
+        <td>2024</td>
+      </tr>
 
-    <tr align="center" valign="top" bgcolor="#FDFEFE">
-        <td align="center"><font color="#34495E">
-            Menjadi platform pemesanan makanan nomor satu yang paling ngerti selera
-            dan dompet pelajar serta mahasiswa.
-        </font></td>
-        <td align="left">
-            <ul>
-                <li>Ngasih pilihan makanan lezat dengan harga jujur.</li>
-                <li>Membuat proses pemesanan jadi super gampang.</li>
-                <li>Menjamin kebersihan dan kecepatan layanan.</li>
-            </ul>
+      <tr>
+        <th>PENDIRI</th>
+        <td>Dhoni Prasetya</td>
+      </tr>
+
+      <tr>
+        <th>BERBASIS DI</th>
+        <td>Tuban, Jawa Timur</td>
+      </tr>
+
+      <tr>
+        <th>VISI</th>
+        <td>
+          Jadi platform makanan paling ramah kantong dan paling gampang diakses
+          di Indonesia.
         </td>
-    </tr>
-</table>
+      </tr>
 
-<br>
-
-<center>
-    <font face="Verdana, sans-serif" color="#2C3E50" size="4">
-        <b>Tim di Balik Foodify</b>
-    </font>
-</center>
-
-<br>
-
-<table border="1" bordercolor="#E0E0E0" width="85%" align="center" cellpadding="10" cellspacing="0">
-    <tr bgcolor="orange">
-        <th width="25%"><font color="#FFFFFF"><b>Bagian</b></font></th>
-        <th><font color="#FFFFFF"><b>Tanggung Jawab</b></font></th>
-    </tr>
-
-    <tr align="center" bgcolor="#FDFEFE">
-        <td><b><font color="#2C3E50">Dapur &amp; Koki</font></b></td>
-        <td align="left"><font color="#34495E">Memastikan tiap masakan punya rasa yang konsisten dan enak.</font></td>
-    </tr>
-
-    <tr align="center" bgcolor="#F9EBDF">
-        <td><b><font color="#2C3E50">Customer Service</font></b></td>
-        <td align="left"><font color="#34495E">Siap bantu kalau ada keluhan atau request khusus dari pelanggan.</font></td>
-    </tr>
-
-    <tr align="center" bgcolor="#FCF3CF">
-        <td><b><font color="#2C3E50">Kurir &amp; Pengiriman</font></b></td>
-        <td align="left"><font color="#34495E">Berusaha sampai tepat waktu biar makanan nggak keburu dingin.</font></td>
-    </tr>
-</table>
-
-<br>
-
-<center>
-    <font face="Verdana, sans-serif" color="#2C3E50" size="4">
-        <b>Kontak Kami</b>
-    </font>
-</center>
-
-<br>
-
-<table border="1" bordercolor="#E0E0E0" width="85%" align="center" cellpadding="10" cellspacing="0">
-    <tr align="center" bgcolor="#FDFEFE">
-        <td width="33%"><font color="#34495E"><b>WhatsApp:</b></font><br>0812-3456-7890</td>
-        <td width="33%"><font color="#34495E"><b>Email:</b></font><br>foodify@gmail.com</td>
-        <td width="33%"><font color="#34495E"><b>Instagram:</b></font><br>@foodifyid</td>
-    </tr>
-</table>
-
-<br>
-
-<center>
-    <table border="0" cellpadding="10">
-        <tr>
-            <td bgcolor="#3498DB" align="center" width="150">
-                <a href="{{ route('foodify.produk') }}"><font color="#FFFFFF" face="Arial"><b>&laquo; Produk</b></font></a>
-            </td>
-            <td width="20"></td>
-            <td bgcolor="#E67E22" align="center" width="150">
-                <a href="{{ route('foodify.pendaftaran') }}"><font color="#FFFFFF" face="Arial"><b>Pendaftaran &raquo;</b></font></a>
-            </td>
-        </tr>
+      <tr>
+        <th>MISI</th>
+        <td>
+          Nyambungin pembeli dengan pilihan makanan yang jelas, jujur soal
+          harga, dan nggak pake ribet.
+        </td>
+      </tr>
     </table>
-</center>
-@endsection
 
+    <br />
+
+    <h3 align="center">FITUR FOODIFY</h3>
+
+    <table
+      border="1"
+      width="700"
+      align="center"
+      cellpadding="6"
+      cellspacing="0"
+    >
+      <tr>
+        <th>NO.</th>
+        <th>FITUR</th>
+        <th>KETERANGAN</th>
+      </tr>
+
+      <tr align="center">
+        <td>1</td>
+        <td><b>BERANDA</b></td>
+        <td align="left">
+          Menampilkan promo, rekomendasi menu, dan informasi utama dari Foodify.
+        </td>
+      </tr>
+
+      <tr align="center">
+        <td>2</td>
+        <td><b>KATEGORI</b></td>
+        <td align="left">
+          Membantu pengguna menemukan menu berdasarkan jenis makanan atau
+          minuman.
+        </td>
+      </tr>
+
+      <tr align="center">
+        <td>3</td>
+        <td><b>PRODUK</b></td>
+        <td align="left">
+          Menampilkan pilihan menu Foodify lengkap dengan kategori, harga, dan
+          deskripsi.
+        </td>
+      </tr>
+
+      <tr align="center">
+        <td>4</td>
+        <td><b>PENDAFTARAN</b></td>
+        <td align="left">
+          Memberikan akses bagi pengguna untuk bergabung sebagai member Foodify.
+        </td>
+      </tr>
+    </table>
+
+    <br />
+
+    <p align="center">
+      <a href="{{ route('foodify.produk') }}">&larr; Produk</a>
+      &nbsp;
+      <a href="{{ route('foodify.pendaftaran') }}">Pendaftaran &rarr;</a>
+    </p>
+@endsection

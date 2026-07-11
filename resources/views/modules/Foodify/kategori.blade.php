@@ -1,136 +1,148 @@
-@extends('modules.Foodify.app', ['bgColor' => '#FDFEFE'])
+@extends('modules.Foodify.app', ['bgColor' => 'red'])
 
 @section('content')
-<center>
-    <font face="Verdana, sans-serif" color="#C0392B" size="5">
-        <b>HALAMAN KATEGORI MENU</b>
-    </font>
-</center>
+    <h2 align="center">HALAMAN KATEGORI</h2>
+    <hr>
 
-<br>
-<hr size="1" color="#E0E0E0">
-<br>
+    <p align="center">Ini dia semua kategori menu yang ada di <b>Foodify</b>.</p>
+    <p align="center">
+        Biar kamu nggak bingung milih, menu di Foodify udah dibagi jadi tiga kategori
+        besar. Mau yang ngenyangein, yang santai buat nyemil, atau sekadar minum
+        sesuatu yang seger, tinggal pilih sesuai mood kamu.
+    </p>
 
-<table width="80%" align="center" border="0">
-    <tr>
-        <td align="center">
-            <font size="3" color="#555555" face="Arial">
-                Biar kamu nggak bingung milih, menu di Foodify udah dibagi jadi tiga kategori besar. 
-                <br>
-                Mau yang ngenyangein, yang santai buat nyemil, atau sekadar minum sesuatu yang seger, tinggal pilih sesuai mood kamu!
-            </font>
-        </td>
-    </tr>
-</table>
+    <hr>
 
-<br><br>
+    <h3 align="center">Daftar Kategori</h3>
 
-<center>
-    <font face="Verdana, sans-serif" color="#2980B9" size="4">
-        <b>Daftar Kategori Kami</b>
-    </font>
-</center>
+    <table border="1" width="700" align="center" cellpadding="6" cellspacing="0">
+        <tr>
+            <th width="40">No</th>
+            <th>Nama Kategori</th>
+            <th>Deskripsi</th>
+            <th>Jumlah Menu</th>
+        </tr>
 
-<br>
-
-<table border="1" bordercolor="#E0E0E0" width="85%" align="center" cellpadding="10" cellspacing="0">
-    <tr bgcolor="#E74C3C">
-        <td width="5%" align="center"><font color="#FFFFFF"><b>No</b></font></td>
-        <td width="25%" align="center"><font color="#FFFFFF"><b>Nama Kategori</b></font></td>
-        <td width="55%" align="center"><font color="#FFFFFF"><b>Deskripsi</b></font></td>
-        <td width="15%" align="center"><font color="#FFFFFF"><b>Jumlah Menu</b></font></td>
-    </tr>
-
-    <tr bgcolor="#FADBD8" align="center">
-        <td><font color="#333333">1</font></td>
-        <td><font color="#C0392B" size="3"><b>Makanan Berat</b></font></td>
-        <td align="left">
-            <font color="#333333" size="2">
+        <tr align="center">
+            <td>1</td>
+            <td><b>Makanan Berat</b></td>
+            <td align="left">
                 Buat yang lagi beneran lapar. Ada nasi goreng, ayam geprek,
                 dan pilihan lain yang bikin kenyang tahan lama.
-            </font>
-        </td>
-        <td><font color="#27AE60"><b>2 Menu</b></font></td>
-    </tr>
+            </td>
+            <td>2 Menu</td>
+        </tr>
 
-    <tr bgcolor="#FCF3CF" align="center">
-        <td><font color="#333333">2</font></td>
-        <td><font color="#F39C12" size="3"><b>Snack & Cemilan</b></font></td>
-        <td align="left">
-            <font color="#333333" size="2">
+        <tr align="center">
+            <td>2</td>
+            <td><b>Snack</b></td>
+            <td align="left">
                 Pas buat nemenin nonton atau ngobrol santai.
                 Burger dan kentang goreng jadi favorit di kategori ini.
-            </font>
-        </td>
-        <td><font color="#27AE60"><b>1 Menu</b></font></td>
-    </tr>
-
-    <tr bgcolor="#D4E6F1" align="center">
-        <td><font color="#333333">3</font></td>
-        <td><font color="#2980B9" size="3"><b>Minuman</b></font></td>
-        <td align="left">
-            <font color="#333333" size="2">
-                Dari es teh yang simpel sampai kopi susu gula aren yang bikin fokus balik lagi. Cocok diminum kapan aja.
-            </font>
-        </td>
-        <td><font color="#27AE60"><b>2 Menu</b></font></td>
-    </tr>
-</table>
-
-<br><br>
-
-<center>
-    <font face="Verdana, sans-serif" color="#2C3E50" size="4">
-        <b>Detail & Range Harga per Kategori</b>
-    </font>
-</center>
-
-<br>
-
-<table border="1" bordercolor="#BDC3C7" width="85%" align="center" cellpadding="10" cellspacing="0">
-    <tr bgcolor="#34495E">
-        <td align="center"><font color="#FFFFFF"><b>Kategori</b></font></td>
-        <td align="center"><font color="#FFFFFF"><b>Harga Termurah</b></font></td>
-        <td align="center"><font color="#FFFFFF"><b>Harga Termahal</b></font></td>
-        <td align="center"><font color="#FFFFFF"><b>Contoh Produk</b></font></td>
-    </tr>
-
-    <tr bgcolor="#FFFFFF" align="center">
-        <td><font color="#333333"><b>Makanan Berat</b></font></td>
-        <td><font color="#27AE60">Rp 18.000</font></td>
-        <td><font color="#C0392B">Rp 25.000</font></td>
-        <td><font color="#7F8C8D" size="2">Nasi Goreng, Ayam Geprek</font></td>
-    </tr>
-
-    <tr bgcolor="#ECF0F1" align="center">
-        <td><font color="#333333"><b>Snack</b></font></td>
-        <td><font color="#27AE60">Rp 15.000</font></td>
-        <td><font color="#C0392B">Rp 30.000</font></td>
-        <td><font color="#7F8C8D" size="2">Burger Sapi</font></td>
-    </tr>
-
-    <tr bgcolor="#FFFFFF" align="center">
-        <td><font color="#333333"><b>Minuman</b></font></td>
-        <td><font color="#27AE60">Rp 5.000</font></td>
-        <td><font color="#C0392B">Rp 18.000</font></td>
-        <td><font color="#7F8C8D" size="2">Es Teh Manis, Kopi Susu</font></td>
-    </tr>
-</table>
-
-<br><br>
-
-<center>
-    <table border="0" cellpadding="10">
-        <tr>
-            <td bgcolor="#E67E22" align="center" width="150">
-                <a href="{{ route('foodify.beranda') }}"><font color="#FFFFFF" face="Arial"><b>&laquo; Kembali ke Beranda</b></font></a>
             </td>
-            <td width="20"></td>
-            <td bgcolor="#3498DB" align="center" width="150">
-                <a href="{{ route('foodify.produk') }}"><font color="#FFFFFF" face="Arial"><b>Lihat Katalog Produk &raquo;</b></font></a>
+            <td>1 Menu</td>
+        </tr>
+
+        <tr align="center">
+            <td>3</td>
+            <td><b>Minuman</b></td>
+            <td align="left">
+                Dari es teh yang simpel sampai kopi yang bikin fokus balik lagi.
+                Cocok diminum kapan aja.
             </td>
+            <td>2 Menu</td>
         </tr>
     </table>
-</center>
-@endsection
 
+    <br>
+
+    <h3 align="center">Range Harga per Kategori</h3>
+
+    <table border="1" width="700" align="center" cellpadding="6" cellspacing="0">
+        <tr>
+            <th>Kategori</th>
+            <th>Harga Termurah</th>
+            <th>Harga Termahal</th>
+            <th>Status</th>
+        </tr>
+
+        <tr align="center">
+            <td>Makanan Berat</td>
+            <td>Rp 18.000</td>
+            <td>Rp 20.000</td>
+            <td>Tersedia</td>
+        </tr>
+
+        <tr align="center">
+            <td>Snack</td>
+            <td>Rp 25.000</td>
+            <td>Rp 25.000</td>
+            <td>Tersedia</td>
+        </tr>
+
+        <tr align="center">
+            <td>Minuman</td>
+            <td>Rp 5.000</td>
+            <td>Rp 10.000</td>
+            <td>Tersedia</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <h3 align="center">Ringkasan Menu Foodify</h3>
+
+    <table border="1" width="700" align="center" cellpadding="6" cellspacing="0">
+        <tr>
+            <th>Total Menu</th>
+            <th>Total Kategori</th>
+            <th>Harga Mulai</th>
+            <th>Keterangan</th>
+        </tr>
+
+        <tr align="center">
+            <td>5 Menu</td>
+            <td>3 Kategori</td>
+            <td>Rp 5.000</td>
+            <td>Halal &amp; Segar</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <h3 align="center">Ringkasan Kategori</h3>
+
+    <table border="1" width="700" align="center" cellpadding="6" cellspacing="0">
+        <tr>
+            <th>No</th>
+            <th>Kategori</th>
+            <th>Contoh Produk</th>
+        </tr>
+
+        <tr align="center">
+            <td>1</td>
+            <td>Makanan Berat</td>
+            <td>Nasi Goreng, Ayam Geprek</td>
+        </tr>
+
+        <tr align="center">
+            <td>2</td>
+            <td>Snack</td>
+            <td>Burger</td>
+        </tr>
+
+        <tr align="center">
+            <td>3</td>
+            <td>Minuman</td>
+            <td>Es Teh, Kopi</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <p align="center">
+        <a href="{{ route('foodify.beranda') }}">&larr; Beranda</a>
+        &nbsp;&nbsp;
+        <a href="{{ route('foodify.produk') }}">Produk &rarr;</a>
+    </p>
+@endsection

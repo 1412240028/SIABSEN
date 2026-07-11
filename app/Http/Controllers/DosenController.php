@@ -65,12 +65,14 @@ class DosenController extends Controller
     public function show(Dosen $dosen)
     {
         $dosen->load('user');
+
         return view('modules.Academic.dosen.show', compact('dosen'));
     }
 
     public function edit(Dosen $dosen)
     {
         $dosen->load('user');
+
         return view('modules.Academic.dosen.edit', compact('dosen'));
     }
 
@@ -78,9 +80,9 @@ class DosenController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:100',
-            'email' => 'required|email|max:100|unique:users,email,' . $dosen->user_id,
+            'email' => 'required|email|max:100|unique:users,email,'.$dosen->user_id,
             'password' => 'nullable|string|min:8',
-            'nidn' => 'required|string|max:20|unique:dosen,nidn,' . $dosen->id,
+            'nidn' => 'required|string|max:20|unique:dosen,nidn,'.$dosen->id,
             'jenis_kelamin' => 'required|in:L,P',
             'no_hp' => 'nullable|string|max:20',
             'alamat' => 'nullable|string',
@@ -92,7 +94,7 @@ class DosenController extends Controller
                 'email' => $validated['email'],
             ];
 
-            if (!empty($validated['password'])) {
+            if (! empty($validated['password'])) {
                 $userData['password'] = Hash::make($validated['password']);
             }
 

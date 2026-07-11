@@ -41,10 +41,22 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="bg-slate-50 text-on-surface font-body-base overflow-x-hidden antialiased">
-        <div class="flex h-screen w-full">
+        <div x-data="{ sidebarOpen: false }" class="flex min-h-screen w-full">
+            
+            {{-- Mobile Sidebar Overlay --}}
+            <div x-show="sidebarOpen" 
+                 x-transition:enter="transition-opacity ease-linear duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition-opacity ease-linear duration-300"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 bg-slate-900/50 z-40 md:hidden backdrop-blur-sm" 
+                 @click="sidebarOpen = false" 
+                 style="display: none;"></div>
             
             {{-- SideNavBar --}}
-            <aside class="h-screen w-sidebar-expanded fixed left-0 top-0 bg-slate-900 border-r border-slate-800 z-50 flex-col p-4 transition-all duration-200 ease-in-out hidden md:flex">
+            <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="h-screen w-sidebar-expanded fixed left-0 top-0 bg-slate-900 border-r border-slate-800 z-50 flex flex-col p-4 transition-transform duration-300 ease-in-out md:translate-x-0">
                 {{-- Header/Brand --}}
                 <div class="flex items-center gap-3 mb-8 px-2 mt-2">
                     <div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
@@ -119,11 +131,13 @@
                         </a>
                     @endif
 
-                    {{-- Kalender Akademik (dummy) --}}
-                    <a href="{{ route('admin.kalender.index') }}" class="{{ request()->routeIs('admin.kalender.*') ? 'bg-primary text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800 transition-colors' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-label-medium text-label-medium">
-                        <span class="material-symbols-outlined">calendar_month</span>
-                        Kalender Akademik
-                    </a>
+                    @if (auth()->user()->isAdmin())
+                        {{-- Kalender Akademik (dummy) --}}
+                        <a href="{{ route('admin.kalender.index') }}" class="{{ request()->routeIs('admin.kalender.*') ? 'bg-primary text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800 transition-colors' }} flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-label-medium text-label-medium">
+                            <span class="material-symbols-outlined">calendar_month</span>
+                            Kalender Akademik
+                        </a>
+                    @endif
                     
                     {{-- Pengaturan --}}
                     <a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.*') ? 'bg-primary text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800 transition-colors' }} flex items-center gap-3 px-4 py-3 rounded-lg font-label-medium text-label-medium">
@@ -155,12 +169,12 @@
             </aside>
 
             {{-- Main Content Canvas --}}
-            <main class="flex-1 flex flex-col md:ml-sidebar-expanded min-h-screen">
+            <main class="flex-1 flex flex-col md:ml-sidebar-expanded min-h-screen pt-navbar-height bg-background">
                 
                 {{-- TopNavBar --}}
-                <header class="bg-surface dark:bg-on-background border-b border-outline-variant shadow-soft h-navbar-height flex items-center justify-between px-8 z-40 sticky top-0 md:fixed md:w-[calc(100%-16rem)]">
+                <header class="bg-surface dark:bg-on-background border-b border-outline-variant shadow-soft h-navbar-height flex items-center justify-between px-4 md:px-8 z-30 fixed top-0 left-0 right-0 md:left-sidebar-expanded">
                     {{-- Mobile Menu Trigger --}}
-                    <button class="md:hidden p-2 -ml-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80">
+                    <button @click="sidebarOpen = true" class="md:hidden p-2 -ml-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80">
                         <span class="material-symbols-outlined">menu</span>
                     </button>
 
@@ -185,7 +199,7 @@
                 </header>
 
                 {{-- Dashboard Content Area --}}
-                <div class="flex-1 overflow-y-auto mt-navbar-height bg-background">
+                <div class="flex-1 flex flex-col">
                     {{-- Flash Messages --}}
                     <div class="p-4 md:p-8 md:pb-0 pb-0 space-y-2">
                         @if (session('success'))

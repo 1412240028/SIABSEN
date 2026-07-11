@@ -1,110 +1,136 @@
-@extends('modules.Foodify.app', ['bgColor' => '#FFFFFF'])
+@extends('modules.Foodify.app', ['bgColor' => 'lightgreen'])
 
 @section('content')
-<center>
-    <font face="Verdana, sans-serif" color="#27AE60" size="5">
-        <b>SELAMAT DATANG DI FOODIFY</b>
-    </font>
-</center>
+    <h2 align="center">HALAMAN BERANDA</h2>
+    <hr>
 
-<br>
-<hr size="1" color="#E0E0E0">
-<br>
+    <p align="center">Halo, selamat datang di <b>Foodify</b>!</p>
+    <p align="center">
+         Lagi bingung mau makan apa? Tenang, Foodify hadir buat bantu kamu nemuin
+        makanan dan minuman yang enak, murah, dan nggak bikin kantong nangis.
+        Dari nasi goreng yang ngangenin sampe kopi yang bikin melek? semuanya ada di sini.
+    </p>
 
-<table width="80%" align="center" border="0">
-    <tr>
-        <td align="center">
-            <font size="3" color="#555555" face="Arial">
-                <b>Foodify</b> adalah tempat terbaik buat kamu yang lagi pengen cari makanan enak, cepat, dan murah.
-                <br><br>
-                Mulai dari cemilan buat nemenin tugas, sampai makanan berat buat ngisi perut kosong, semuanya ada di sini.
-                Kami selalu menjaga kualitas bahan biar masakan yang sampai ke tanganmu tetap <i>fresh</i> dan lezat.
-            </font>
-        </td>
-    </tr>
-</table>
+    <hr>
 
-<br><br>
+    <h3 align="center">Promo Spesial</h3>
 
-<center>
-    <font face="Verdana, sans-serif" color="#2C3E50" size="4">
-        <b>Menu Favorit Minggu Ini</b>
-    </font>
-</center>
-
-<br>
-
-<table border="1" bordercolor="#E0E0E0" width="80%" align="center" cellpadding="10" cellspacing="0">
-    <tr bgcolor="#F39C12">
-        <td width="5%" align="center"><font color="#FFFFFF"><b>No</b></font></td>
-        <td width="20%" align="center"><font color="#FFFFFF"><b>Gambar</b></font></td>
-        <td width="55%" align="center"><font color="#FFFFFF"><b>Keterangan</b></font></td>
-        <td width="20%" align="center"><font color="#FFFFFF"><b>Kategori</b></font></td>
-    </tr>
-
-    <tr bgcolor="#FDFEFE" align="center">
-        <td><font color="#333333">1</font></td>
-        <td>
-            <img src="{{ asset('foodify_assets/images/nasi-goreng.png') }}" alt="Nasi Goreng" width="120" height="90">
-        </td>
-        <td align="left">
-            <font size="3" color="#2C3E50"><b>Nasi Goreng</b></font><br>
-            <font size="2" color="#7F8C8D">Yang paling sering di-reorder pelanggan karena porsinya bikin kenyang banget!</font>
-        </td>
-        <td><font color="#16A085"><b>Makanan Berat</b></font></td>
-    </tr>
-
-    <tr bgcolor="#F9EBDF" align="center">
-        <td><font color="#333333">2</font></td>
-        <td>
-            <img src="{{ asset('foodify_assets/images/kopi.png') }}" alt="Kopi" width="120" height="90">
-        </td>
-        <td align="left">
-            <font size="3" color="#2C3E50"><b>Kopi Susu Gula Aren</b></font><br>
-            <font size="2" color="#7F8C8D">Teman begadang yang nggak pernah gagal nemenin bikin tugas.</font>
-        </td>
-        <td><font color="#8E44AD"><b>Minuman</b></font></td>
-    </tr>
-</table>
-
-<br><br>
-
-<center>
-    <font face="Verdana, sans-serif" color="#2980B9" size="4">
-        <b>Kenapa Pilih Foodify?</b>
-    </font>
-</center>
-<br>
-
-<table border="1" bordercolor="#BDC3C7" width="80%" align="center" cellpadding="10" cellspacing="0">
-    <tr bgcolor="#ECF0F1">
-        <td width="30%" align="center"><font color="#C0392B"><b>🚀 Cepat</b></font></td>
-        <td width="70%"><font color="#34495E">Pesanan langsung diproses tanpa ribet. Waktu tunggunya sebentar aja!</font></td>
-    </tr>
-    <tr bgcolor="#FFFFFF">
-        <td width="30%" align="center"><font color="#27AE60"><b>💸 Murah</b></font></td>
-        <td width="70%"><font color="#34495E">Harga pas di kantong mahasiswa dan pelajar. Ga bikin dompet nangis.</font></td>
-    </tr>
-    <tr bgcolor="#ECF0F1">
-        <td width="30%" align="center"><font color="#8E44AD"><b>📦 Praktis</b></font></td>
-        <td width="70%"><font color="#34495E">Pesan lewat web, tinggal klik-klik, lalu ambil atau tunggu diantar.</font></td>
-    </tr>
-</table>
-
-<br><br>
-
-<center>
-    <table border="0" cellpadding="10">
+    <table border="1" width="700" align="center" cellpadding="6" cellspacing="0">
         <tr>
-            <td bgcolor="#3498DB" align="center" width="150">
-                <a href="{{ route('foodify.pendaftaran') }}"><font color="#FFFFFF" face="Arial"><b>&laquo; Daftar Member</b></font></a>
+            <th>Promo</th>
+            <th>Keterangan</th>
+        </tr>
+
+        <tr align="center">
+            <td><b>Gratis Ongkir</b></td>
+            <td align="left">
+                Khusus pembelian pertama, ongkir gratis dengan minimal order Rp 15.000. Lumayan kan?
             </td>
-            <td width="20"></td>
-            <td bgcolor="#E67E22" align="center" width="150">
-                <a href="{{ route('foodify.kategori') }}"><font color="#FFFFFF" face="Arial"><b>Lihat Kategori &raquo;</b></font></a>
+        </tr>
+
+        <tr align="center">
+            <td><b>Mulai Dari Lima Ribu</b></td>
+            <td align="left">
+                <b>Ada menu minuman mulai Rp 5.000</b> cocok buat yang lagi irit di akhir bulan.
             </td>
         </tr>
     </table>
-</center>
-@endsection
 
+    <br>
+
+    <h3 align="center">Kenapa Pilih Foodify?</h3>
+
+    <table border="1" width="700" align="center" cellpadding="6" cellspacing="0">
+        <tr>
+            <th>No</th>
+            <th>Keunggulan</th>
+            <th>Keterangan</th>
+        </tr>
+
+        <tr align="center">
+            <td>1</td>
+            <td><b>Halal & Terjamin</b></td>
+            <td align="left"><b>"Semua menu udah dicek kehalalannya"</b> jadi kamu bisa makan dengan tenang.</td>
+        </tr>
+
+        <tr align="center">
+            <td>2</td>
+            <td><b>Bahan Segar</b></td>
+            <td align="left"><b>Bahan dipilih fresh tiap hari</b></td>
+        </tr>
+
+        <tr align="center">
+            <td>3</td>
+            <td><b>Ramah di Kantong</b></td>
+            <td align="left">Harga disesuaikan buat pelajar dan mahasiswa <b>"Kenyang nggak harus mahal."</b></td>
+        </tr>
+
+        <tr align="center">
+            <td>4</td>
+            <td><b>Prosesnya Cepet</b></td>
+            <td align="left"><b>Pesanan diproses langsung</b> nggak perlu nunggu lama buat dapet makananmu.</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <h3 align="center">Menu Unggulan</h3>
+
+    <table border="1" width="700" align="center" cellpadding="6" cellspacing="0">
+        <tr>
+            <th width="40">No</th>
+            <th width="150">Gambar</th>
+            <th>Nama Produk</th>
+            <th>Kategori</th>
+            <th>Harga</th>
+        </tr>
+
+        <tr align="center">
+            <td>1</td>
+            <td>
+                <img src="{{ asset('foodify_assets/images/nasi-goreng.png') }}" alt="Nasi Goreng" width="120" height="90">
+            </td>
+            <td align="left"><b>Nasi Goreng</b><br>Yang paling sering di-reorder pelanggan</td>
+            <td>Makanan Berat</td>
+            <td>Rp 20.000</td>
+        </tr>
+
+        <tr align="center">
+            <td>2</td>
+            <td>
+                <img src="{{ asset('foodify_assets/images/kopi.png') }}" alt="Kopi" width="120" height="90">
+            </td>
+            <td align="left"><b>Kopi</b><br>Teman begadang yang nggak pernah gagal</td>
+            <td>Minuman</td>
+            <td>Rp 10.000</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <h3 align="center">Foodify dalam Angka</h3>
+
+    <table border="1" width="700" align="center" cellpadding="6" cellspacing="0">
+        <tr>
+            <th>Total Menu</th>
+            <th>Total Kategori</th>
+            <th>Harga Mulai</th>
+            <th>Status</th>
+        </tr>
+
+        <tr align="center">
+            <td>5+ Menu</td>
+            <td>3 Kategori</td>
+            <td>Rp 5.000</td>
+            <td><b>Halal & Segar</b></td>
+        </tr>
+    </table>
+
+    <br>
+
+    <p align="center">
+        <a href="{{ route('foodify.pendaftaran') }}">&larr; Pendaftaran</a>
+        &nbsp;&nbsp;
+        <a href="{{ route('foodify.kategori') }}">Kategori &rarr;</a>
+    </p>
+@endsection

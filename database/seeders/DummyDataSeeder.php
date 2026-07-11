@@ -2,18 +2,18 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Dosen;
-use App\Models\Mahasiswa;
-use App\Models\Kelas;
-use App\Models\MataKuliah;
 use App\Models\Jadwal;
-use App\Models\SesiPresensi;
-use App\Models\Presensi;
-use App\Models\PengajuanIzin;
+use App\Models\Kelas;
 use App\Models\KomplainPresensi;
+use App\Models\Mahasiswa;
+use App\Models\MataKuliah;
+use App\Models\PengajuanIzin;
+use App\Models\Presensi;
+use App\Models\SesiPresensi;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 class DummyDataSeeder extends Seeder
@@ -26,7 +26,7 @@ class DummyDataSeeder extends Seeder
         $mataKuliah = MataKuliah::first();
         $userMahasiswa = User::where('id', $mahasiswa->user_id ?? 0)->first() ?? User::first();
 
-        if (!$dosen || !$mahasiswa || !$kelas || !$mataKuliah) {
+        if (! $dosen || ! $mahasiswa || ! $kelas || ! $mataKuliah) {
             return;
         }
 
@@ -82,7 +82,7 @@ class DummyDataSeeder extends Seeder
             'status' => 'ALPHA',
             'metode' => 'MANUAL',
             'waktu_presensi' => null,
-            'catatan' => 'Belum hadir'
+            'catatan' => 'Belum hadir',
         ]);
 
         // Create PengajuanIzin for Mahasiswa

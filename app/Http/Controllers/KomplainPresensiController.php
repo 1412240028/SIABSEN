@@ -13,6 +13,7 @@ class KomplainPresensiController extends Controller
         $user = auth()->user();
         if ($user->role === 'mahasiswa') {
             $komplain = KomplainPresensi::where('mahasiswa_id', $user->mahasiswa->id)->latest()->get();
+
             return view('modules.Academic.komplain.mahasiswa_index', compact('komplain'));
         } elseif ($user->role === 'dosen') {
             $jadwalIds = $user->dosen->jadwal()->pluck('id');
@@ -21,20 +22,22 @@ class KomplainPresensiController extends Controller
                 ->with('mahasiswa', 'sesiPresensi.jadwal.mataKuliah')
                 ->latest()
                 ->get();
+
             return view('modules.Academic.komplain.dosen_index', compact('komplain'));
         }
-        
+
         $komplain = KomplainPresensi::with('mahasiswa', 'sesiPresensi.jadwal.mataKuliah')->latest()->get();
+
         return view('modules.Academic.komplain.admin_index', compact('komplain'));
     }
 
     public function create()
     {
         $mahasiswa = auth()->user()->mahasiswa;
-        $sesi = SesiPresensi::with('jadwal.mataKuliah')->whereHas('jadwal', function($q) use ($mahasiswa) {
+        $sesi = SesiPresensi::with('jadwal.mataKuliah')->whereHas('jadwal', function ($q) use ($mahasiswa) {
             $q->where('kelas_id', $mahasiswa->kelas_id);
         })->latest('tanggal')->get();
-        
+
         return view('modules.Academic.komplain.create', compact('sesi'));
     }
 
@@ -62,10 +65,10 @@ class KomplainPresensiController extends Controller
     public function resolve(Request $request, KomplainPresensi $komplain)
     {
         $request->validate(['tanggapan' => 'required|string']);
-        
+
         $komplain->update([
             'status' => 'RESOLVED',
-            'tanggapan' => $request->tanggapan
+            'tanggapan' => $request->tanggapan,
         ]);
 
         return back()->with('success', 'Komplain diselesaikan.');
@@ -74,10 +77,10 @@ class KomplainPresensiController extends Controller
     public function reject(Request $request, KomplainPresensi $komplain)
     {
         $request->validate(['tanggapan' => 'required|string']);
-        
+
         $komplain->update([
             'status' => 'REJECTED',
-            'tanggapan' => $request->tanggapan
+            'tanggapan' => $request->tanggapan,
         ]);
 
         return back()->with('success', 'Komplain ditolak.');

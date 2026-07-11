@@ -177,7 +177,7 @@ class SesiPresensiController extends Controller
 
         return redirect()
             ->route('dosen.sesi_presensi.show', $sesiPresensi)
-            ->with('success', $missingMahasiswaIds->count() . ' mahasiswa ditandai Alpha.');
+            ->with('success', $missingMahasiswaIds->count().' mahasiswa ditandai Alpha.');
     }
 
     protected function authorizeDosenSession(SesiPresensi $sesiPresensi): void

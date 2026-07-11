@@ -51,7 +51,7 @@ class KelasController extends Controller
     public function update(Request $request, Kelas $kelas)
     {
         $validated = $request->validate([
-            'nama_kelas' => 'required|string|max:30|unique:kelas,nama_kelas,' . $kelas->id,
+            'nama_kelas' => 'required|string|max:30|unique:kelas,nama_kelas,'.$kelas->id,
             'angkatan' => 'required|digits:4|integer|min:2000|max:2100',
             'kapasitas' => 'required|integer|min:1|max:200',
             'status' => 'required|boolean',

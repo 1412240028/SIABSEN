@@ -2,16 +2,16 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\KalenderAkademik;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class KalenderAkademikSeeder extends Seeder
 {
     public function run(): void
     {
         $now = Carbon::now();
-        
+
         $data = [
             [
                 'kegiatan' => 'Ujian Tengah Semester (UTS)',

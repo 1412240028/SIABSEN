@@ -10,6 +10,7 @@ class KalenderAkademikController extends Controller
     public function index()
     {
         $kalender = KalenderAkademik::orderBy('tanggal_mulai')->get();
+
         return view('modules.Academic.kalender.index', compact('kalender'));
     }
 
@@ -24,7 +25,7 @@ class KalenderAkademikController extends Controller
             'kegiatan' => 'required|string|max:255',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
-            'jenis' => 'required|in:Libur,Ujian,Perkuliahan,Lainnya'
+            'jenis' => 'required|in:Libur,Ujian,Perkuliahan,Lainnya',
         ]);
 
         KalenderAkademik::create($request->all());
@@ -43,7 +44,7 @@ class KalenderAkademikController extends Controller
             'kegiatan' => 'required|string|max:255',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
-            'jenis' => 'required|in:Libur,Ujian,Perkuliahan,Lainnya'
+            'jenis' => 'required|in:Libur,Ujian,Perkuliahan,Lainnya',
         ]);
 
         $kalender->update($request->all());
@@ -54,6 +55,7 @@ class KalenderAkademikController extends Controller
     public function destroy(KalenderAkademik $kalender)
     {
         $kalender->delete();
+
         return redirect()->route('admin.kalender.index')->with('success', 'Kalender Akademik berhasil dihapus.');
     }
 }

@@ -1,6 +1,9 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+    <div class="mb-6 text-center">
+        <h2 class="font-headline-xl text-headline-xl font-bold text-on-surface">Konfirmasi Password</h2>
+        <p class="text-on-surface-variant text-body-sm mt-1">
+            {{ __('Ini adalah area aman dari aplikasi. Harap konfirmasi password Anda sebelum melanjutkan.') }}
+        </p>
     </div>
 
     <form method="POST" action="{{ route('password.confirm') }}">
@@ -20,7 +23,7 @@
 
         <div class="flex justify-end mt-4">
             <x-primary-button>
-                {{ __('Confirm') }}
+                {{ __('Konfirmasi') }}
             </x-primary-button>
         </div>
     </form>

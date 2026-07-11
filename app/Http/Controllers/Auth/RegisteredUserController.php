@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kelas;
+use App\Models\Mahasiswa;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -43,13 +45,13 @@ class RegisteredUserController extends Controller
             'role' => 'mahasiswa',
         ]);
 
-        $kelas = \App\Models\Kelas::query()->where('status', true)->orderBy('nama_kelas')->first();
+        $kelas = Kelas::query()->where('status', true)->orderBy('nama_kelas')->first();
 
         if ($kelas) {
-            \App\Models\Mahasiswa::create([
+            Mahasiswa::create([
                 'user_id' => $user->id,
                 'kelas_id' => $kelas->id,
-                'nim' => 'TEMP' . str_pad((string) $user->id, 6, '0', STR_PAD_LEFT),
+                'nim' => 'TEMP'.str_pad((string) $user->id, 6, '0', STR_PAD_LEFT),
                 'nama' => $user->name,
                 'jenis_kelamin' => 'L',
                 'tanggal_lahir' => null,

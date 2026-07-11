@@ -1,21 +1,28 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\KelasController;
-use App\Http\Controllers\MataKuliahController;
 use App\Http\Controllers\DosenController;
-use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\FoodifyController;
 use App\Http\Controllers\JadwalController;
-use App\Http\Controllers\SesiPresensiController;
+use App\Http\Controllers\KalenderAkademikController;
+use App\Http\Controllers\KelasController;
+use App\Http\Controllers\KomplainPresensiController;
+use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\MataKuliahController;
+use App\Http\Controllers\PengajuanIzinController;
+use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SesiPresensiController;
+use App\Models\Dosen;
 use App\Models\Jadwal as JadwalModel;
+use App\Models\Kelas;
+use App\Models\KomplainPresensi;
+use App\Models\Mahasiswa;
+use App\Models\PengajuanIzin;
+use App\Models\Pengumuman;
 use App\Models\Presensi;
 use App\Models\SesiPresensi as SesiPresensiModel;
-use App\Models\Mahasiswa;
-use App\Models\Dosen;
-use App\Models\Kelas;
-
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -50,8 +57,8 @@ Route::middleware('auth')->group(function () {
             ->limit(5)
             ->get();
 
-        $pendingIzin = \App\Models\PengajuanIzin::where('status', 'PENDING')->count();
-        $pendingKomplain = \App\Models\KomplainPresensi::where('status', 'PENDING')->count();
+        $pendingIzin = PengajuanIzin::where('status', 'PENDING')->count();
+        $pendingKomplain = KomplainPresensi::where('status', 'PENDING')->count();
 
         return view('modules.Academic.dashboards.dashboard-admin', compact(
             'totalMahasiswa',
@@ -120,7 +127,7 @@ Route::middleware('auth')->group(function () {
             })->count();
         }
 
-        $izinTerbaru = \App\Models\PengajuanIzin::with('user')->where('status', 'PENDING')->latest()->take(3)->get();
+        $izinTerbaru = PengajuanIzin::with('user')->where('status', 'PENDING')->latest()->take(3)->get();
 
         return view('modules.Academic.dashboards.dashboard-dosen', compact(
             'dosen',
@@ -173,7 +180,7 @@ Route::middleware('auth')->group(function () {
                 ->get();
         }
 
-        $pengumuman = \App\Models\Pengumuman::where('is_active', true)->latest()->take(3)->get();
+        $pengumuman = Pengumuman::where('is_active', true)->latest()->take(3)->get();
 
         return view('modules.Academic.dashboards.dashboard-mahasiswa', compact(
             'mahasiswa',
@@ -232,39 +239,39 @@ Route::middleware('auth')->group(function () {
     // Admin only: rekap presensi, pengumuman, kalender
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('presensi/rekap', [PresensiController::class, 'rekap'])->name('presensi.rekap');
-        
-        Route::resource('pengumuman', \App\Http\Controllers\PengumumanController::class);
-        Route::resource('kalender', \App\Http\Controllers\KalenderAkademikController::class);
+
+        Route::resource('pengumuman', PengumumanController::class);
+        Route::resource('kalender', KalenderAkademikController::class);
     });
 
     // Izin & Komplain (All roles have different views/actions inside controller, but we group them)
     Route::prefix('izin')->name('izin.')->group(function () {
-        Route::get('/', [\App\Http\Controllers\PengajuanIzinController::class, 'index'])->name('index');
-        Route::get('/create', [\App\Http\Controllers\PengajuanIzinController::class, 'create'])->name('create');
-        Route::post('/', [\App\Http\Controllers\PengajuanIzinController::class, 'store'])->name('store');
-        Route::post('/{izin}/approve', [\App\Http\Controllers\PengajuanIzinController::class, 'approve'])->name('approve');
-        Route::post('/{izin}/reject', [\App\Http\Controllers\PengajuanIzinController::class, 'reject'])->name('reject');
+        Route::get('/', [PengajuanIzinController::class, 'index'])->name('index');
+        Route::get('/create', [PengajuanIzinController::class, 'create'])->name('create');
+        Route::post('/', [PengajuanIzinController::class, 'store'])->name('store');
+        Route::post('/{izin}/approve', [PengajuanIzinController::class, 'approve'])->name('approve');
+        Route::post('/{izin}/reject', [PengajuanIzinController::class, 'reject'])->name('reject');
     });
 
     Route::prefix('komplain')->name('komplain.')->group(function () {
-        Route::get('/', [\App\Http\Controllers\KomplainPresensiController::class, 'index'])->name('index');
-        Route::get('/create', [\App\Http\Controllers\KomplainPresensiController::class, 'create'])->name('create');
-        Route::post('/', [\App\Http\Controllers\KomplainPresensiController::class, 'store'])->name('store');
-        Route::post('/{komplain}/resolve', [\App\Http\Controllers\KomplainPresensiController::class, 'resolve'])->name('resolve');
-        Route::post('/{komplain}/reject', [\App\Http\Controllers\KomplainPresensiController::class, 'reject'])->name('reject');
+        Route::get('/', [KomplainPresensiController::class, 'index'])->name('index');
+        Route::get('/create', [KomplainPresensiController::class, 'create'])->name('create');
+        Route::post('/', [KomplainPresensiController::class, 'store'])->name('store');
+        Route::post('/{komplain}/resolve', [KomplainPresensiController::class, 'resolve'])->name('resolve');
+        Route::post('/{komplain}/reject', [KomplainPresensiController::class, 'reject'])->name('reject');
     });
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
 
 // Foodify Routes
 Route::prefix('foodify')->name('foodify.')->group(function () {
-    Route::get('/', [\App\Http\Controllers\FoodifyController::class, 'index'])->name('beranda');
-    Route::get('/kategori', [\App\Http\Controllers\FoodifyController::class, 'kategori'])->name('kategori');
-    Route::get('/produk', [\App\Http\Controllers\FoodifyController::class, 'produk'])->name('produk');
-    Route::get('/profil', [\App\Http\Controllers\FoodifyController::class, 'profil'])->name('profil');
-    Route::get('/pendaftaran', [\App\Http\Controllers\FoodifyController::class, 'pendaftaran'])->name('pendaftaran');
-    Route::post('/pendaftaran/tambah', [\App\Http\Controllers\FoodifyController::class, 'storeMember'])->name('pendaftaran.store');
-    Route::post('/pendaftaran/update', [\App\Http\Controllers\FoodifyController::class, 'updateMember'])->name('pendaftaran.update');
-    Route::get('/pendaftaran/hapus', [\App\Http\Controllers\FoodifyController::class, 'deleteMember'])->name('pendaftaran.delete');
+    Route::get('/', [FoodifyController::class, 'index'])->name('beranda');
+    Route::get('/kategori', [FoodifyController::class, 'kategori'])->name('kategori');
+    Route::get('/produk', [FoodifyController::class, 'produk'])->name('produk');
+    Route::get('/profil', [FoodifyController::class, 'profil'])->name('profil');
+    Route::get('/pendaftaran', [FoodifyController::class, 'pendaftaran'])->name('pendaftaran');
+    Route::post('/pendaftaran/tambah', [FoodifyController::class, 'storeMember'])->name('pendaftaran.store');
+    Route::post('/pendaftaran/update', [FoodifyController::class, 'updateMember'])->name('pendaftaran.update');
+    Route::get('/pendaftaran/hapus', [FoodifyController::class, 'deleteMember'])->name('pendaftaran.delete');
 });

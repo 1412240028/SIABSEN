@@ -28,6 +28,7 @@ class MahasiswaController extends Controller
     public function create()
     {
         $kelas = Kelas::where('status', true)->orderBy('nama_kelas')->get();
+
         return view('modules.Academic.mahasiswa.create', compact('kelas'));
     }
 
@@ -73,6 +74,7 @@ class MahasiswaController extends Controller
     public function show(Mahasiswa $mahasiswa)
     {
         $mahasiswa->load(['user', 'kelas']);
+
         return view('modules.Academic.mahasiswa.show', compact('mahasiswa'));
     }
 
@@ -80,6 +82,7 @@ class MahasiswaController extends Controller
     {
         $mahasiswa->load('user');
         $kelas = Kelas::where('status', true)->orderBy('nama_kelas')->get();
+
         return view('modules.Academic.mahasiswa.edit', compact('mahasiswa', 'kelas'));
     }
 
@@ -87,10 +90,10 @@ class MahasiswaController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:100',
-            'email' => 'required|email|max:100|unique:users,email,' . $mahasiswa->user_id,
+            'email' => 'required|email|max:100|unique:users,email,'.$mahasiswa->user_id,
             'password' => 'nullable|string|min:8',
             'kelas_id' => 'required|exists:kelas,id',
-            'nim' => 'required|string|max:20|unique:mahasiswa,nim,' . $mahasiswa->id,
+            'nim' => 'required|string|max:20|unique:mahasiswa,nim,'.$mahasiswa->id,
             'jenis_kelamin' => 'required|in:L,P',
             'tanggal_lahir' => 'nullable|date',
             'no_hp' => 'nullable|string|max:20',
@@ -104,7 +107,7 @@ class MahasiswaController extends Controller
                 'email' => $validated['email'],
             ];
 
-            if (!empty($validated['password'])) {
+            if (! empty($validated['password'])) {
                 $userData['password'] = Hash::make($validated['password']);
             }
 

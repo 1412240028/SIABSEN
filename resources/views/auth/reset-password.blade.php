@@ -1,4 +1,9 @@
 <x-guest-layout>
+    <div class="mb-6 text-center">
+        <h2 class="font-headline-xl text-headline-xl font-bold text-on-surface">Reset Password</h2>
+        <p class="text-on-surface-variant text-body-sm mt-1">Silakan masukkan password baru Anda.</p>
+    </div>
+
     <form method="POST" action="{{ route('password.store') }}">
         @csrf
 
@@ -31,7 +36,7 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
+            <x-primary-button class="w-full sm:w-auto">
                 {{ __('Reset Password') }}
             </x-primary-button>
         </div>

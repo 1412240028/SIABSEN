@@ -1,13 +1,6 @@
-@extends('modules.Foodify.app', ['bgColor' => 'lightyellow'])
+@extends('modules.Foodify.app', ['bgColor' => 'lightblue'])
 
 @php
-/**
- * Hint untuk static analyzer: $data_edit diharapkan berupa object (mis. Model Member)
- * saat $edit_mode == true.
- *
- * Jika variabel benar-benar bisa null/false saat edit_mode, gunakan null-safe operator
- * di bagian HTML.
- */
 function gambarProduk($nama_produk)
 {
     $nama = strtolower($nama_produk);
@@ -29,143 +22,125 @@ function gambarProduk($nama_produk)
 @endphp
 
 @section('content')
-<center>
-    <font face="Verdana, sans-serif" color="#27AE60" size="5">
-        <b>DAFTAR PRODUK FOODIFY</b>
-    </font>
-</center>
+    <h2 align="center">DAFTAR PRODUK FOODIFY</h2>
+    <hr>
 
-<br>
-<hr size="1" color="#E0E0E0">
-<br>
-
-<p align="center">
-    <font size="3" color="#555555" face="Arial">
+    <p align="center">
         Temukan berbagai pilihan makanan dan minuman favorit di <b>Foodify</b>.
-    </font>
-</p>
+    </p>
 
-<p align="center">
-    <font size="3" color="#555555" face="Arial">
+    <p align="center">
         Mulai dari makanan berat, snack, sampai minuman segar. Semuanya tersedia
         untuk menemani aktivitas kamu sehari-hari.
-    </font>
-</p>
+    </p>
 
-<hr>
+    <hr>
 
-<center>
-    <font face="Verdana, sans-serif" color="#2C3E50" size="4">
-        <b>Daftar Menu Foodify</b>
-    </font>
-</center>
+    <h3 align="center">Daftar Menu Foodify</h3>
 
-<br>
+    <table border="1" width="950" align="center" cellpadding="8" cellspacing="0">
+        <tr bgcolor="orange">
+            <th width="40">No</th>
+            <th width="130">Gambar</th>
+            <th>Nama Produk</th>
+            <th>Kategori</th>
+            <th>Harga</th>
+            <th>Deskripsi</th>
+            <th>Status</th>
+        </tr>
 
-<table border="1" bordercolor="#E0E0E0" width="85%" align="center" cellpadding="10" cellspacing="0">
-    <tr bgcolor="orange">
-        <th width="40"><font color="#FFFFFF"><b>No</b></font></th>
-        <th width="130"><font color="#FFFFFF"><b>Gambar</b></font></th>
-        <th><font color="#FFFFFF"><b>Nama Produk</b></font></th>
-        <th><font color="#FFFFFF"><b>Kategori</b></font></th>
-        <th><font color="#FFFFFF"><b>Harga</b></font></th>
-        <th><font color="#FFFFFF"><b>Deskripsi</b></font></th>
-        <th><font color="#FFFFFF"><b>Status</b></font></th>
-    </tr>
+        @php($no = 1)
+        @forelse($produk as $item)
+            @php($gambar = gambarProduk($item->nama_produk))
+            <tr align="center">
+                <td>{{ $no++ }}</td>
 
-    @forelse($produk as $index => $item)
-        <tr align="center" bgcolor="#FDFEFE">
-            <td><font color="#333333"><b>{{ $index + 1 }}</b></font></td>
+                <td>
+                    <img src="{{ $gambar }}" alt="{{ $item->nama_produk }}" width="110" height="80">
+                </td>
+
+                <td align="left">
+                    <b>{{ $item->nama_produk }}</b>
+                </td>
+
+                <td>
+                    {{ $item->kategori }}
+                </td>
+
+                <td>
+                    <b>Rp {{ number_format($item->harga, 0, ',', '.') }}</b>
+                </td>
+
+                <td align="left">
+                    {{ $item->deskripsi }}
+                </td>
+
+                <td>
+                    Tersedia
+                </td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="7" align="center">Belum ada produk yang tersedia.</td>
+            </tr>
+        @endforelse
+    </table>
+
+    <br>
+
+    <h3 align="center">Kategori Produk</h3>
+
+    <table border="1" width="700" align="center" cellpadding="8" cellspacing="0">
+        <tr bgcolor="orange">
+            <th>No</th>
+            <th>Kategori</th>
+            <th>Keterangan</th>
+        </tr>
+
+        <tr align="center">
+            <td>1</td>
+            <td><b>Makanan Berat</b></td>
+            <td align="left">Menu utama yang cocok untuk makan siang atau makan malam.</td>
+        </tr>
+
+        <tr align="center">
+            <td>2</td>
+            <td><b>Snack</b></td>
+            <td align="left">Cemilan santai buat nemenin ngobrol, belajar, atau nonton.</td>
+        </tr>
+
+        <tr align="center">
+            <td>3</td>
+            <td><b>Minuman</b></td>
+            <td align="left">Pilihan minuman segar dan hangat untuk melengkapi pesanan.</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <h3 align="center">Informasi Pemesanan</h3>
+
+    <table border="1" width="700" align="center" cellpadding="8" cellspacing="0">
+        <tr>
+            <th width="180">Cara Pesan</th>
             <td>
-                <img src="{{ gambarProduk($item->nama_produk) }}" alt="{{ $item->nama_produk }}" width="110" height="80">
-            </td>
-            <td align="left"><b><font color="#2C3E50">{{ $item->nama_produk }}</font></b></td>
-            <td><font color="#34495E">{{ $item->kategori }}</font></td>
-            <td><b><font color="#C0392B">Rp {{ number_format($item->harga, 0, ',', '.') }}</font></b></td>
-            <td align="left"><font color="#34495E">{{ $item->deskripsi }}</font></td>
-            <td><font color="#27AE60"><b>Tersedia</b></font></td>
-        </tr>
-    @empty
-        <tr>
-            <td colspan="7" align="center">
-                <font color="#34495E">Belum ada produk yang tersedia.</font>
+                Pilih produk yang tersedia, lalu lanjutkan pemesanan melalui layanan Foodify.
             </td>
         </tr>
-    @endforelse
-</table>
 
-<br>
-
-<center>
-    <font face="Verdana, sans-serif" color="#2980B9" size="4">
-        <b>Kategori Produk</b>
-    </font>
-</center>
-
-<br>
-
-<table border="1" bordercolor="#E0E0E0" width="85%" align="center" cellpadding="10" cellspacing="0">
-    <tr bgcolor="orange">
-        <th width="40"><font color="#FFFFFF"><b>No</b></font></th>
-        <th><font color="#FFFFFF"><b>Kategori</b></font></th>
-        <th><font color="#FFFFFF"><b>Keterangan</b></font></th>
-    </tr>
-
-    <tr bgcolor="#FADBD8" align="center">
-        <td><font color="#333333"><b>1</b></font></td>
-        <td><font color="#C0392B" size="3"><b>Makanan Berat</b></font></td>
-        <td align="left"><font color="#333333">Menu utama yang cocok untuk makan siang atau makan malam.</font></td>
-    </tr>
-
-    <tr bgcolor="#FCF3CF" align="center">
-        <td><font color="#333333"><b>2</b></font></td>
-        <td><font color="#F39C12" size="3"><b>Snack</b></font></td>
-        <td align="left"><font color="#333333">Cemilan santai buat nemenin ngobrol, belajar, atau nonton.</font></td>
-    </tr>
-
-    <tr bgcolor="#D4E6F1" align="center">
-        <td><font color="#333333"><b>3</b></font></td>
-        <td><font color="#2980B9" size="3"><b>Minuman</b></font></td>
-        <td align="left"><font color="#333333">Pilihan minuman segar dan hangat untuk melengkapi pesanan.</font></td>
-    </tr>
-</table>
-
-<br>
-
-<center>
-    <font face="Verdana, sans-serif" color="#2C3E50" size="4">
-        <b>Informasi Pemesanan</b>
-    </font>
-</center>
-
-<br>
-
-<table border="1" bordercolor="#BDC3C7" width="85%" align="center" cellpadding="10" cellspacing="0">
-    <tr bgcolor="#ECF0F1">
-        <td width="25%" align="center"><font color="#34495E"><b>Cara Pesan</b></font></td>
-        <td align="left"><font color="#34495E">Pilih produk yang tersedia, lalu lanjutkan pemesanan melalui layanan Foodify.</font></td>
-    </tr>
-
-    <tr bgcolor="#FFFFFF">
-        <td align="center"><font color="#34495E"><b>Keunggulan</b></font></td>
-        <td align="left"><font color="#34495E">Harga ramah kantong, bahan segar, dan pilihan menu yang cocok untuk pelajar maupun mahasiswa.</font></td>
-    </tr>
-</table>
-
-<br>
-
-<center>
-    <table border="0" cellpadding="10">
         <tr>
-            <td bgcolor="#E67E22" align="center" width="150">
-                <a href="{{ route('foodify.kategori') }}"><font color="#FFFFFF" face="Arial"><b>&laquo; Kembali ke Kategori</b></font></a>
-            </td>
-            <td width="20"></td>
-            <td bgcolor="#3498DB" align="center" width="150">
-                <a href="{{ route('foodify.profil') }}"><font color="#FFFFFF" face="Arial"><b>Profil &rarr;</b></font></a>
+            <th>Keunggulan</th>
+            <td>
+                Harga ramah kantong, bahan segar, dan pilihan menu yang cocok untuk pelajar maupun mahasiswa.
             </td>
         </tr>
     </table>
-</center>
-@endsection
 
+    <br>
+
+    <p align="center">
+        <a href="{{ route('foodify.kategori') }}">&larr; Kategori</a>
+        &nbsp;
+        <a href="{{ route('foodify.profil') }}">Profil &rarr;</a>
+    </p>
+@endsection

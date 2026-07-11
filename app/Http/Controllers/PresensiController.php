@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Presensi;
-use App\Models\SesiPresensi;
+use App\Models\Kelas;
 use App\Models\Mahasiswa;
 use App\Models\MataKuliah;
-use App\Models\Kelas;
+use App\Models\Presensi;
+use App\Models\SesiPresensi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -149,7 +149,7 @@ class PresensiController extends Controller
         if ($existingPresensi) {
             return redirect()
                 ->route('mahasiswa.presensi.history')
-                ->with('info', 'Anda sudah melakukan presensi sebelumnya untuk mata kuliah ' . $sesi->jadwal->mataKuliah->nama . ' (Pertemuan Ke-' . $sesi->pertemuan_ke . ').');
+                ->with('info', 'Anda sudah melakukan presensi sebelumnya untuk mata kuliah '.$sesi->jadwal->mataKuliah->nama.' (Pertemuan Ke-'.$sesi->pertemuan_ke.').');
         }
 
         Presensi::create([
@@ -162,7 +162,7 @@ class PresensiController extends Controller
 
         return redirect()
             ->route('mahasiswa.presensi.history')
-            ->with('success', 'Presensi QR berhasil dicatat untuk mata kuliah ' . $sesi->jadwal->mataKuliah->nama . ' (Pertemuan Ke-' . $sesi->pertemuan_ke . ') pada pukul ' . now()->format('H:i') . '. Silakan periksa daftar riwayat presensi Anda di bawah ini.');
+            ->with('success', 'Presensi QR berhasil dicatat untuk mata kuliah '.$sesi->jadwal->mataKuliah->nama.' (Pertemuan Ke-'.$sesi->pertemuan_ke.') pada pukul '.now()->format('H:i').'. Silakan periksa daftar riwayat presensi Anda di bawah ini.');
     }
 
     public function rekap(Request $request)

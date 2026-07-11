@@ -16,13 +16,13 @@ class CheckRole
     {
         $user = $request->user();
 
-        if (!$user) {
+        if (! $user) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
         $effectiveRole = $this->resolveEffectiveRole($user);
 
-        if (!in_array($effectiveRole, $roles, true)) {
+        if (! in_array($effectiveRole, $roles, true)) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
@@ -31,7 +31,7 @@ class CheckRole
 
     protected function resolveEffectiveRole($user): ?string
     {
-        if (!empty($user->role)) {
+        if (! empty($user->role)) {
             return $user->role;
         }
 

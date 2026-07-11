@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PengajuanIzin;
 use App\Models\Jadwal;
+use App\Models\PengajuanIzin;
 use Illuminate\Http\Request;
 
 class PengajuanIzinController extends Controller
@@ -13,6 +13,7 @@ class PengajuanIzinController extends Controller
         $user = auth()->user();
         if ($user->role === 'mahasiswa') {
             $izin = PengajuanIzin::where('user_id', $user->id)->latest()->get();
+
             return view('modules.Academic.izin.mahasiswa_index', compact('izin'));
         } elseif ($user->role === 'dosen') {
             // Dosen melihat pengajuan izin mahasiswa untuk kelasnya
@@ -22,11 +23,13 @@ class PengajuanIzinController extends Controller
                 ->with('user.mahasiswa')
                 ->latest()
                 ->get();
+
             return view('modules.Academic.izin.dosen_index', compact('izin'));
         }
-        
+
         // Admin
         $izin = PengajuanIzin::with('user')->latest()->get();
+
         return view('modules.Academic.izin.admin_index', compact('izin'));
     }
 
@@ -38,6 +41,7 @@ class PengajuanIzinController extends Controller
             $mahasiswa = $user->mahasiswa;
             $jadwal = Jadwal::with('mataKuliah')->where('kelas_id', $mahasiswa->kelas_id)->get();
         }
+
         return view('modules.Academic.izin.create', compact('jadwal'));
     }
 
@@ -69,9 +73,9 @@ class PengajuanIzinController extends Controller
         // Simple approve logic
         $izin->update([
             'status' => 'APPROVED',
-            'approved_by' => auth()->id()
+            'approved_by' => auth()->id(),
         ]);
-        
+
         // TODO: Auto create presensi record if this is specific to a Jadwal/Sesi
 
         return back()->with('success', 'Izin disetujui.');
@@ -81,7 +85,7 @@ class PengajuanIzinController extends Controller
     {
         $izin->update([
             'status' => 'REJECTED',
-            'approved_by' => auth()->id()
+            'approved_by' => auth()->id(),
         ]);
 
         return back()->with('success', 'Izin ditolak.');
