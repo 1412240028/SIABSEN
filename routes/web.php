@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\DosenController;
-use App\Http\Controllers\FoodifyController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\KalenderAkademikController;
 use App\Http\Controllers\KelasController;
@@ -263,15 +262,3 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-
-// Foodify Routes
-Route::prefix('foodify')->name('foodify.')->group(function () {
-    Route::get('/', [FoodifyController::class, 'index'])->name('beranda');
-    Route::get('/kategori', [FoodifyController::class, 'kategori'])->name('kategori');
-    Route::get('/produk', [FoodifyController::class, 'produk'])->name('produk');
-    Route::get('/profil', [FoodifyController::class, 'profil'])->name('profil');
-    Route::get('/pendaftaran', [FoodifyController::class, 'pendaftaran'])->name('pendaftaran');
-    Route::post('/pendaftaran/tambah', [FoodifyController::class, 'storeMember'])->name('pendaftaran.store');
-    Route::post('/pendaftaran/update', [FoodifyController::class, 'updateMember'])->name('pendaftaran.update');
-    Route::get('/pendaftaran/hapus', [FoodifyController::class, 'deleteMember'])->name('pendaftaran.delete');
-});
